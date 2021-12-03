@@ -1,11 +1,11 @@
 
 
 def main(lines):
-    total_bits_per = len(lines[0].replace("\n", ""))
+    total_bits_per = len(lines[0])
     bit_counts = [[0, 0] for bit in range(total_bits_per)]
 
     for line in lines:
-        for index, bit in enumerate(line.replace('\n', '')):
+        for index, bit in enumerate(line):
             bit_val = int(bit)
             bit_counts[index][bit_val] += 1
 

@@ -20,6 +20,7 @@ if __name__ == "__main__":
 
     with open(input_file, "r") as f:
         lines = f.readlines()
+        lines = [line.replace('\n', '') for line in lines]
 
         if part == 1:
             module_dir = f"day{day}.part1Solution"
