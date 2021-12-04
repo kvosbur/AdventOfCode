@@ -15,7 +15,7 @@ if __name__ == "__main__":
     before = datetime.datetime.now()
 
     part = args.part_number[0]
-    print("Running program")
+    print(f"Running program for day {day} part {part}")
     input_file = path.join(path.dirname(__file__), target_dir, f"day_{day}_input.txt")
 
     with open(input_file, "r") as f:
