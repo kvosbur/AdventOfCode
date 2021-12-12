@@ -34,9 +34,9 @@ def path_hunt(start, graph, node_counts, seen_small_cave_twice=False):
     for edge in graph[start]:
         can_continue, new_seen_small_cave_twice = check_visit_count_okay(edge, node_counts, seen_small_cave_twice)
         if can_continue:
-            new_node_counts = make_base_counts(graph, node_counts)
-            new_node_counts[edge] += 1
-            paths += path_hunt(edge, graph, new_node_counts, new_seen_small_cave_twice)
+            node_counts[edge] += 1
+            paths += path_hunt(edge, graph, node_counts, new_seen_small_cave_twice)
+            node_counts[edge] -= 1
     return paths
 
 

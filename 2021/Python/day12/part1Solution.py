@@ -14,16 +14,16 @@ def check_visit_count_okay(node, node_counts):
     return True
 
 
-def path_hunt(start, graph, node_counts, count = 0):
+def path_hunt(start, graph, node_counts):
     if start == "end":
         return 1
 
     paths = 0
     for edge in graph[start]:
         if check_visit_count_okay(edge, node_counts):
-            new_node_counts = make_base_counts(graph, node_counts)
-            new_node_counts[edge] += 1
-            paths += path_hunt(edge, graph, new_node_counts, count + 1)
+            node_counts[edge] += 1
+            paths += path_hunt(edge, graph, node_counts)
+            node_counts[edge] -= 1
 
     return paths
 
