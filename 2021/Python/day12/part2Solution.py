@@ -14,26 +14,6 @@ class Node:
         self.edges.append(node)
 
 
-def make_base_counts(graph, existing_counts=None):
-    base = {}
-    for key in graph.keys():
-        if existing_counts is None:
-            base[key] = 0
-        else:
-            base[key] = existing_counts[key]
-    return base
-
-
-def has_visited_small_cave_twice(node_counts):
-    for key in node_counts.keys():
-        if key.islower() and node_counts[key] == 2:
-            return True
-
-
-def get_node_count(node, node_counts):
-    return node_counts[node]
-
-
 def check_visit_count_okay(node, seen_small_cave_twice):
     if node.is_lower:
         if node.count == 1 and not seen_small_cave_twice and not node.is_start:
@@ -70,7 +50,6 @@ def main(lines):
         graph[first].add_edge(graph[second])
         graph[second].add_edge(graph[first])
 
-    # node_counts = make_base_counts(graph)
     start = graph["start"]
     start.count = 1
     paths = path_hunt(start, graph)
