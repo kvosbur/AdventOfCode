@@ -3,6 +3,9 @@ import datetime
 import importlib
 from os import path
 import cProfile
+import pstats
+from pstats import SortKey
+import os
 
 parser = argparse.ArgumentParser(description="Run the challenge for a given day and part")
 parser.add_argument("day_number", metavar="day", type=int, nargs=1, help="The given day to create the files for")
@@ -32,14 +35,17 @@ if __name__ == "__main__":
         module = importlib.import_module(module_dir)
 
         if args.run_profiler:
+            profile_result_file = "results"
             print("Running profiler")
-            cProfile.run('module.main(lines)')
+            cProfile.run('module.main(lines)', profile_result_file)
+
+            p = pstats.Stats(profile_result_file)
+            p.strip_dirs().sort_stats(SortKey.CALLS).print_stats()
+            os.remove(profile_result_file)
+
         else:
             module.main(lines)
+            after = datetime.datetime.now()
+            total = after - before
 
-    after = datetime.datetime.now()
-    total = after - before
-
-    print(f"total time taken: {total}")
-
-
+            print(f"total time taken: {total}")
