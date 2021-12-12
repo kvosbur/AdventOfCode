@@ -2,6 +2,7 @@ import argparse
 import datetime
 import importlib
 from os import path
+import cProfile
 
 parser = argparse.ArgumentParser(description="Run the challenge for a given day and part")
 parser.add_argument("day_number", metavar="day", type=int, nargs=1, help="The given day to create the files for")
@@ -28,7 +29,9 @@ if __name__ == "__main__":
             module_dir = f"day{day}.part2Solution"
 
         module = importlib.import_module(module_dir)
+
         module.main(lines)
+        # cProfile.run('module.main(lines)')
 
     after = datetime.datetime.now()
     total = after - before

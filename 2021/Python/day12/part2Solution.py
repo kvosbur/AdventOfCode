@@ -17,25 +17,26 @@ def has_visited_small_cave_twice(node_counts):
             return True
 
 
-def check_visit_count_okay(node, node_counts):
+def check_visit_count_okay(node, node_counts, seen_small_cave_twice):
     if node.islower():
-        if node_counts[node] == 1 and not has_visited_small_cave_twice(node_counts) and node not in special_nodes:
-            return True
+        if node_counts[node] == 1 and not seen_small_cave_twice and node not in special_nodes:
+            return True, True
         if node_counts[node] > 0:
-            return False
-    return True
+            return False, seen_small_cave_twice
+    return True, seen_small_cave_twice
 
 
-def path_hunt(start, graph, node_counts):
+def path_hunt(start, graph, node_counts, seen_small_cave_twice=False):
     if start == "end":
         return 1
 
     paths = 0
     for edge in graph[start]:
-        if check_visit_count_okay(edge, node_counts):
+        can_continue, new_seen_small_cave_twice = check_visit_count_okay(edge, node_counts, seen_small_cave_twice)
+        if can_continue:
             new_node_counts = make_base_counts(graph, node_counts)
             new_node_counts[edge] += 1
-            paths += path_hunt(edge, graph, new_node_counts)
+            paths += path_hunt(edge, graph, new_node_counts, new_seen_small_cave_twice)
     return paths
 
 
@@ -57,3 +58,4 @@ def main(lines):
     paths = path_hunt("start", graph, node_counts)
 
     print("Paths", paths)
+    # 122880
