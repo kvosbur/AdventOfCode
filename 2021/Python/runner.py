@@ -7,6 +7,7 @@ import cProfile
 parser = argparse.ArgumentParser(description="Run the challenge for a given day and part")
 parser.add_argument("day_number", metavar="day", type=int, nargs=1, help="The given day to create the files for")
 parser.add_argument("part_number", metavar="part", type=int, nargs=1, choices=[1,2], help="The given day to create the files for")
+parser.add_argument("--run-profiler", action="store_true", help="Flag of whether to run profiler on given day/part")
 
 if __name__ == "__main__":
     args = parser.parse_args()
@@ -30,8 +31,11 @@ if __name__ == "__main__":
 
         module = importlib.import_module(module_dir)
 
-        module.main(lines)
-        # cProfile.run('module.main(lines)')
+        if args.run_profiler:
+            print("Running profiler")
+            cProfile.run('module.main(lines)')
+        else:
+            module.main(lines)
 
     after = datetime.datetime.now()
     total = after - before
