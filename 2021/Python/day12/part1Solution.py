@@ -1,30 +1,30 @@
-def make_base_counts(graph, existing_counts=None):
-    base = {}
-    for key in graph.keys():
-        if existing_counts is None:
-            base[key] = 0
-        else:
-            base[key] = existing_counts[key]
-    return base
+class Node:
+    def __init__(self, key):
+        self.key = key
+        self.is_lower = key.islower()
+        self.is_start = key == "start"
+        self.is_end = key == "end"
+        self.count = 0
+
+        self.edges = []
+
+    def add_edge(self, node):
+        self.edges.append(node)
 
 
-def check_visit_count_okay(node, node_counts):
-    if node.islower() and node_counts[node] > 0:
-        return False
-    return True
-
-
-def path_hunt(start, graph, node_counts):
+def path_hunt(start, graph, seen_small_cave_twice=False):
     paths = 0
-    for edge in graph[start]:
-        if check_visit_count_okay(edge, node_counts):
-            if edge == "end":
-                paths += 1
-            else:
-                node_counts[edge] += 1
-                paths += path_hunt(edge, graph, node_counts)
-                node_counts[edge] -= 1
-
+    for edge in start.edges:
+        if edge.is_end:
+            paths += 1
+        elif not edge.is_lower:
+            edge.count += 1
+            paths += path_hunt(edge, graph, seen_small_cave_twice)
+            edge.count -= 1
+        elif edge.count == 0:
+            edge.count += 1
+            paths += path_hunt(edge, graph, seen_small_cave_twice)
+            edge.count -= 1
     return paths
 
 
@@ -34,15 +34,17 @@ def main(lines):
     for line in lines:
         first, second = line.split('-')
         if graph.get(first) is None:
-            graph[first] = []
+            graph[first] = Node(first)
         if graph.get(second) is None:
-            graph[second] = []
+            graph[second] = Node(second)
 
-        graph[first].append(second)
-        graph[second].append(first)
+        graph[first].add_edge(graph[second])
+        if not graph[first].is_start:
+            graph[second].add_edge(graph[first])
 
-    node_counts = make_base_counts(graph)
-    node_counts["start"] = 1
-    paths = path_hunt("start", graph, node_counts)
+    start = graph["start"]
+    start.count = 1
+    paths = path_hunt(start, graph)
 
     print("Paths", paths)
+    # 122880

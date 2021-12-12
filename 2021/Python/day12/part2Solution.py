@@ -1,6 +1,3 @@
-special_nodes = ["start", "end"]
-
-
 class Node:
     def __init__(self, key):
         self.key = key
