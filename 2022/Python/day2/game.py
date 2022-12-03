@@ -1,9 +1,13 @@
 from enum import Enum
 
+
 class Option(Enum):
     Rock = 1
     Paper = 2
     Scissors = 3
+
+
+all_options = [Option.Rock, Option.Paper, Option.Scissors]
 
 
 def parse_option(text: str):
