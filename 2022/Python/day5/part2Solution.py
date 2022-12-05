@@ -1,3 +1,9 @@
+
+
+def main(lines):
+    # do work here
+    print("solution is day2 .....")
+
 stacks = [
     ['R', 'S', 'L', 'F', 'Q'],
     ['N', 'Z', 'Q', 'G', 'P', 'T'],
