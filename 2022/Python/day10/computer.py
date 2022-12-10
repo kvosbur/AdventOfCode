@@ -39,3 +39,24 @@ class CPU:
         return len(self.instructions) == self.current_instruction_index
 
 
+class Screen:
+
+    def __init__(self, registers: Dict[str, Register]):
+        self.registers = registers
+        self.current_position = 0
+        self.current_row = ""
+        self.rows = []
+
+    def draw_next(self):
+        width_pos = self.current_position % 40
+        sprite_pos = self.registers['x'].value
+        if sprite_pos - 1 <= width_pos <= sprite_pos + 1:
+            self.current_row += "#"
+        else:
+            self.current_row += "."
+
+        self.current_position += 1
+        if self.current_position % 40 == 0:
+            self.rows.append(self.current_row)
+            self.current_row = ""
+
