@@ -38,13 +38,19 @@ class Monkey:
             print("unsupported operation", self.operation)
             exit()
 
-    def do_turn(self):
+    def do_turn(self, is_worried=True):
         item_locations = defaultdict(lambda: [])
         for item in self.items:
             self.inspected += 1
             # print(self.identifier, item)
-            new_worry = self.increase_worry(item) // 3
+            new_worry = self.increase_worry(item)
+            if is_worried:
+                new_worry = new_worry // 3
+
+
             test_value = new_worry % self.divisibility
+            # use modulus to keep the number small. The value is the product of all the divisibility values
+            new_worry = new_worry % 9699690
             if test_value == 0:
                 item_locations[self.monkey_if_true].append(new_worry)
             else:
