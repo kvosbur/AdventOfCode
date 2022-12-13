@@ -36,10 +36,4 @@ def main(lines):
 
         to_visit += current.get_neighbors(graph)
 
-    # pprint(graph)
-    # print(start)
-
     debug_graph(graph)
-
-    # do work here
-    print("solution is day1 .....")
