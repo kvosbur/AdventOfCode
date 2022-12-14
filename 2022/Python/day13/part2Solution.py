@@ -1,10 +1,12 @@
 from string import digits
+from functools import cmp_to_key
 
 
 def parse_line(line):
     stack = []
     line = line.replace(',', ' ').replace('[', '[ ').replace(']', ' ]').replace('  ', ' ').split(' ')
     for token in line:
+        # print(char, stack)
         if token[0] in digits:
             stack.append(int(token))
         elif token == "[":
@@ -38,7 +40,6 @@ def is_right_order(left, right):
         right = [right]
 
     index = 0
-    # print("comparing:", left, right)
     while index < len(left) and index < len(right):
         cmp = is_right_order(left[index], right[index])
         if cmp != 0:
@@ -46,7 +47,6 @@ def is_right_order(left, right):
 
         index += 1
 
-    # print("debug", index, len(left), len(right), left, right)
     if index == len(left) and index < len(right):
         return -1
     elif index < len(left) and index == len(right):
@@ -58,7 +58,7 @@ def is_right_order(left, right):
 def main(lines):
 
     line_index = 0
-    num_correct = 0
+    parsed = []
     while line_index < len(lines):
         first = lines[line_index]
         second = lines[line_index + 1]
@@ -66,10 +66,19 @@ def main(lines):
         line_index += 3
         first_parsed = parse_line(first)
         second_parsed = parse_line(second)
+        parsed.append(first_parsed)
+        parsed.append(second_parsed)
 
-        is_correct = is_right_order(first_parsed, second_parsed)
-        if is_correct == -1:
-            num_correct += (line_index // 3)
+    # add distress signal packets
+    parsed.append([[2]])
+    parsed.append([[6]])
+
+    parsed.sort(key=cmp_to_key(is_right_order))
+
+    product = 1
+    for index, packet in enumerate(parsed):
+        if packet == [[2]] or packet == [[6]]:
+            product = product * (index + 1)
 
     # do work here
-    print("solution is day1 .....", num_correct)
+    print("solution is day2 .....", product)
