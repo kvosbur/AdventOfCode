@@ -26,7 +26,6 @@ def place_sand(cavern, lower_x):
     coord = [500, 0]
     moving = True
     while moving:
-        # print("debug", lower_x, coord, len(cavern), len(cavern[0]))
         if coord[1] == len(cavern) - 1 or coord[0] == lower_x or coord[0] - lower_x == len(cavern[0]) - 1:
             print("reached the abyss")
             return True
@@ -94,7 +93,5 @@ def main(lines):
         finished = place_sand(cavern, lower_x)
         count += 1
         print("sand count:", count)
-        # print_cavern(cavern)
 
     print('result:', count - 1)
-    # print_cavern(cavern)
