@@ -13,8 +13,6 @@ def get_manhat_dist(sensor, beacon):
 
 def cover_full_manhat_dist(center, target_y, dist):
     global max_coord
-    if target_y < center[1] - dist or center[1] + dist < target_y:
-        return
 
     y_dist = target_y - center[1]
     x_dist = dist - y_dist
@@ -59,11 +57,12 @@ def main(lines):
         pairs = []
 
         for sensor, beacon, manhat_dist in combos:
+            if y < sensor[1] - manhat_dist or sensor[1] + manhat_dist < y:
+                continue
             temp = cover_full_manhat_dist(sensor, y, manhat_dist)
-            if temp is not None:
-                pairs.append(temp)
+            pairs += [temp]
 
-        pairs.sort(key=lambda x: x[0])
+        pairs.sort()
         first = pairs[0]
         results = []
         for pair in pairs[1:]:
@@ -76,18 +75,6 @@ def main(lines):
                 results.append(first)
                 results.append(pair)
                 break
-        # while len(pairs) != 1:
-        #     first = pairs.pop(0)
-        #     second = pairs.pop(0)
-        #     if second[0] - 1 <= first[1] <= second[1]:
-        #         new = [first[0], second[1]]
-        #         pairs.insert(0, new)
-        #     elif second[1] < first[1]:
-        #         pairs.insert(0, first)
-        #     else:
-        #         pairs.insert(0, first)
-        #         pairs.insert(1, second)
-        #         break
 
         if len(results) > 1:
             found_x = results[0][1] + 1

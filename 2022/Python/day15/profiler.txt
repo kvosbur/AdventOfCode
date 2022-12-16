@@ -1,92 +1,16 @@
-Thu Dec 15 22:41:22 2022    results
+Thu Dec 15 23:00:10 2022    results
 
-         155101516 function calls (155101492 primitive calls) in 48.198 seconds
-
-   Ordered by: call count
-
-   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
- 94996170   16.983    0.000   16.983    0.000 part2Solution.py:14(cover_full_manhat_dist)
- 26885745    2.034    0.000    2.034    0.000 {method 'append' of 'list' objects}
- 26885622    1.984    0.000    1.984    0.000 part2Solution.py:66(<lambda>)
-3166612/3166605    0.236    0.000    0.236    0.000 {built-in method builtins.len}
-  3166539    3.526    0.000    5.510    0.000 {method 'sort' of 'list' objects}
-      161    0.004    0.000    0.004    0.000 {built-in method builtins.print}
-       82    0.000    0.000    0.000    0.000 {built-in method builtins.isinstance}
-       60    0.000    0.000    0.000    0.000 part2Solution.py:7(<listcomp>)
-       60    0.000    0.000    0.000    0.000 part2Solution.py:6(convert_to_int)
-       60    0.000    0.000    0.000    0.000 {built-in method builtins.abs}
-       46    0.000    0.000    0.000    0.000 sre_parse.py:164(__getitem__)
-       31    0.000    0.000    0.000    0.000 sre_parse.py:233(__next)
-       30    0.000    0.000    0.000    0.000 re.py:250(compile)
-       30    0.000    0.000    0.000    0.000 re.py:289(_compile)
-       30    0.000    0.000    0.000    0.000 part2Solution.py:10(get_manhat_dist)
-       30    0.000    0.000    0.000    0.000 {method 'findall' of 're.Pattern' objects}
-       26    0.000    0.000    0.000    0.000 sre_parse.py:254(get)
-       19    0.000    0.000    0.000    0.000 sre_parse.py:249(match)
-       15    0.000    0.000    0.000    0.000 sre_parse.py:160(__len__)
-       15    0.000    0.000    0.000    0.000 {built-in method builtins.min}
-       13    0.000    0.000    0.000    0.000 sre_parse.py:286(tell)
-       12    0.000    0.000    0.000    0.000 sre_parse.py:172(append)
-       12    0.000    0.000    0.000    0.000 {built-in method builtins.ord}
-      9/3    0.000    0.000    0.000    0.000 sre_parse.py:174(getwidth)
-      7/1    0.000    0.000    0.000    0.000 sre_compile.py:71(_compile)
-        7    0.000    0.000    0.000    0.000 sre_parse.py:111(__init__)
-        6    0.000    0.000    0.000    0.000 sre_parse.py:81(groups)
-        6    0.000    0.000    0.000    0.000 {method 'find' of 'bytearray' objects}
-        4    0.000    0.000    0.000    0.000 sre_compile.py:423(_simple)
-        4    0.000    0.000    0.000    0.000 sre_parse.py:168(__setitem__)
-        4    0.000    0.000    0.000    0.000 sre_parse.py:432(_uniq)
-        4    0.000    0.000    0.000    0.000 {built-in method fromkeys}
-        3    0.000    0.000    0.000    0.000 sre_compile.py:65(_combine_flags)
-      3/1    0.000    0.000    0.000    0.000 sre_parse.py:435(_parse_sub)
-      3/1    0.000    0.000    0.000    0.000 sre_parse.py:493(_parse)
-        3    0.000    0.000    0.000    0.000 {method 'extend' of 'list' objects}
-        2    0.000    0.000    0.000    0.000 enum.py:313(__call__)
-        2    0.000    0.000    0.000    0.000 enum.py:631(__new__)
-        2    0.000    0.000    0.000    0.000 sre_compile.py:249(_compile_charset)
-        2    0.000    0.000    0.000    0.000 sre_compile.py:276(_optimize_charset)
-        2    0.000    0.000    0.000    0.000 sre_compile.py:453(_get_iscased)
-      2/1    0.000    0.000    0.000    0.000 sre_compile.py:461(_get_literal_prefix)
-        2    0.000    0.000    0.000    0.000 sre_compile.py:595(isstring)
-        2    0.000    0.000    0.000    0.000 sre_parse.py:84(opengroup)
-        2    0.000    0.000    0.000    0.000 sre_parse.py:96(closegroup)
-        1    0.000    0.000    0.000    0.000 enum.py:938(__and__)
-        1    0.000    0.000    0.000    0.000 sre_compile.py:432(_generate_overlap_table)
-        1    0.000    0.000    0.000    0.000 sre_compile.py:536(_compile_info)
-        1    0.000    0.000    0.000    0.000 sre_compile.py:598(_code)
-        1    0.000    0.000    0.000    0.000 sre_compile.py:759(compile)
-        1    0.000    0.000    0.000    0.000 sre_parse.py:76(__init__)
-        1    0.000    0.000    0.000    0.000 sre_parse.py:224(__init__)
-        1    0.000    0.000    0.000    0.000 sre_parse.py:921(fix_flags)
-        1    0.000    0.000    0.000    0.000 sre_parse.py:937(parse)
-        1   23.431   23.431   48.198   48.198 part2Solution.py:46(main)
-        1    0.000    0.000   48.198   48.198 <string>:1(<module>)
-        1    0.000    0.000    0.000    0.000 {built-in method _sre.compile}
-        1    0.000    0.000    0.000    0.000 {method 'items' of 'dict' objects}
-        1    0.000    0.000   48.198   48.198 {built-in method builtins.exec}
-        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
-
-
-
-Process finished with exit code 0
-
-
-
-Thu Dec 15 22:44:36 2022    results
-
-         155101516 function calls (155101492 primitive calls) in 46.512 seconds
+         33219724 function calls (33219700 primitive calls) in 24.141 seconds
 
    Ordered by: cumulative time
 
    ncalls  tottime  percall  cumtime  percall filename:lineno(function)
-        1    0.000    0.000   46.512   46.512 {built-in method builtins.exec}
-        1    0.000    0.000   46.512   46.512 <string>:1(<module>)
-        1   22.628   22.628   46.512   46.512 part2Solution.py:46(main)
- 94996170   16.368    0.000   16.368    0.000 part2Solution.py:14(cover_full_manhat_dist)
-  3166539    3.383    0.000    5.302    0.000 {method 'sort' of 'list' objects}
- 26885745    1.988    0.000    1.988    0.000 {method 'append' of 'list' objects}
- 26885622    1.920    0.000    1.920    0.000 part2Solution.py:66(<lambda>)
-3166612/3166605    0.222    0.000    0.222    0.000 {built-in method builtins.len}
+        1    0.000    0.000   24.141   24.141 {built-in method builtins.exec}
+        1    0.000    0.000   24.141   24.141 <string>:1(<module>)
+        1   16.005   16.005   24.141   24.141 part2Solution.py:44(main)
+ 26885622    6.287    0.000    6.287    0.000 part2Solution.py:14(cover_full_manhat_dist)
+  3166539    1.650    0.000    1.650    0.000 {method 'sort' of 'list' objects}
+3166612/3166605    0.196    0.000    0.196    0.000 {built-in method builtins.len}
       161    0.004    0.000    0.004    0.000 {built-in method builtins.print}
        30    0.000    0.000    0.000    0.000 re.py:250(compile)
        30    0.000    0.000    0.000    0.000 re.py:289(_compile)
@@ -98,49 +22,49 @@ Thu Dec 15 22:44:36 2022    results
       7/1    0.000    0.000    0.000    0.000 sre_compile.py:71(_compile)
        60    0.000    0.000    0.000    0.000 part2Solution.py:6(convert_to_int)
        30    0.000    0.000    0.000    0.000 {method 'findall' of 're.Pattern' objects}
+       46    0.000    0.000    0.000    0.000 sre_parse.py:164(__getitem__)
        60    0.000    0.000    0.000    0.000 part2Solution.py:7(<listcomp>)
        30    0.000    0.000    0.000    0.000 part2Solution.py:10(get_manhat_dist)
-       46    0.000    0.000    0.000    0.000 sre_parse.py:164(__getitem__)
-      9/3    0.000    0.000    0.000    0.000 sre_parse.py:174(getwidth)
         1    0.000    0.000    0.000    0.000 sre_compile.py:536(_compile_info)
-        2    0.000    0.000    0.000    0.000 sre_parse.py:96(closegroup)
+      9/3    0.000    0.000    0.000    0.000 sre_parse.py:174(getwidth)
        26    0.000    0.000    0.000    0.000 sre_parse.py:254(get)
+        2    0.000    0.000    0.000    0.000 sre_parse.py:96(closegroup)
         2    0.000    0.000    0.000    0.000 sre_compile.py:276(_optimize_charset)
        82    0.000    0.000    0.000    0.000 {built-in method builtins.isinstance}
+      123    0.000    0.000    0.000    0.000 {method 'append' of 'list' objects}
        31    0.000    0.000    0.000    0.000 sre_parse.py:233(__next)
        12    0.000    0.000    0.000    0.000 sre_parse.py:172(append)
-      2/1    0.000    0.000    0.000    0.000 sre_compile.py:461(_get_literal_prefix)
-        4    0.000    0.000    0.000    0.000 sre_parse.py:432(_uniq)
         4    0.000    0.000    0.000    0.000 sre_compile.py:423(_simple)
        13    0.000    0.000    0.000    0.000 sre_parse.py:286(tell)
-       19    0.000    0.000    0.000    0.000 sre_parse.py:249(match)
+        4    0.000    0.000    0.000    0.000 sre_parse.py:432(_uniq)
+      2/1    0.000    0.000    0.000    0.000 sre_compile.py:461(_get_literal_prefix)
         1    0.000    0.000    0.000    0.000 enum.py:938(__and__)
-       15    0.000    0.000    0.000    0.000 sre_parse.py:160(__len__)
+       19    0.000    0.000    0.000    0.000 sre_parse.py:249(match)
        60    0.000    0.000    0.000    0.000 {built-in method builtins.abs}
+       15    0.000    0.000    0.000    0.000 sre_parse.py:160(__len__)
         2    0.000    0.000    0.000    0.000 sre_parse.py:84(opengroup)
        15    0.000    0.000    0.000    0.000 {built-in method builtins.min}
         2    0.000    0.000    0.000    0.000 enum.py:313(__call__)
         2    0.000    0.000    0.000    0.000 sre_compile.py:249(_compile_charset)
         1    0.000    0.000    0.000    0.000 sre_parse.py:224(__init__)
+        7    0.000    0.000    0.000    0.000 sre_parse.py:111(__init__)
         2    0.000    0.000    0.000    0.000 sre_compile.py:595(isstring)
         6    0.000    0.000    0.000    0.000 sre_parse.py:81(groups)
-        7    0.000    0.000    0.000    0.000 sre_parse.py:111(__init__)
         6    0.000    0.000    0.000    0.000 {method 'find' of 'bytearray' objects}
-        4    0.000    0.000    0.000    0.000 {built-in method fromkeys}
         1    0.000    0.000    0.000    0.000 sre_compile.py:432(_generate_overlap_table)
-       12    0.000    0.000    0.000    0.000 {built-in method builtins.ord}
+        4    0.000    0.000    0.000    0.000 {built-in method fromkeys}
         2    0.000    0.000    0.000    0.000 enum.py:631(__new__)
         3    0.000    0.000    0.000    0.000 sre_compile.py:65(_combine_flags)
-        1    0.000    0.000    0.000    0.000 sre_parse.py:921(fix_flags)
+       12    0.000    0.000    0.000    0.000 {built-in method builtins.ord}
         1    0.000    0.000    0.000    0.000 {built-in method _sre.compile}
         4    0.000    0.000    0.000    0.000 sre_parse.py:168(__setitem__)
+        1    0.000    0.000    0.000    0.000 sre_parse.py:921(fix_flags)
         1    0.000    0.000    0.000    0.000 sre_parse.py:76(__init__)
+        3    0.000    0.000    0.000    0.000 {method 'extend' of 'list' objects}
         1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
         2    0.000    0.000    0.000    0.000 sre_compile.py:453(_get_iscased)
-        3    0.000    0.000    0.000    0.000 {method 'extend' of 'list' objects}
         1    0.000    0.000    0.000    0.000 {method 'items' of 'dict' objects}
 
 
 
 Process finished with exit code 0
-
