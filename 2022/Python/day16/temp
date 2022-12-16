@@ -1,0 +1,79 @@
+Fri Dec 16 13:09:34 2022    results
+
+         35133676 function calls (13435670 primitive calls) in 20.623 seconds
+
+   Ordered by: cumulative time
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.000    0.000   20.623   20.623 {built-in method builtins.exec}
+        1    0.000    0.000   20.623   20.623 <string>:1(<module>)
+        1    0.000    0.000   20.623   20.623 part1Solution.py:61(main)
+21697987/1   13.239    0.000   20.622   20.622 part1Solution.py:39(brute_force)
+ 13434822    7.383    0.000    7.383    0.000 part1Solution.py:32(is_node_turned_on_in_visit)
+       10    0.000    0.000    0.001    0.000 valve.py:15(__init__)
+       20    0.000    0.000    0.001    0.000 re.py:250(compile)
+       20    0.000    0.000    0.001    0.000 re.py:289(_compile)
+        2    0.000    0.000    0.001    0.000 sre_compile.py:759(compile)
+       10    0.000    0.000    0.000    0.000 valve.py:24(_get_flow_rate)
+        2    0.000    0.000    0.000    0.000 sre_parse.py:937(parse)
+      4/2    0.000    0.000    0.000    0.000 sre_parse.py:435(_parse_sub)
+      4/2    0.000    0.000    0.000    0.000 sre_parse.py:493(_parse)
+       17    0.000    0.000    0.000    0.000 sre_parse.py:172(append)
+       10    0.000    0.000    0.000    0.000 valve.py:28(_get_identifier)
+        2    0.000    0.000    0.000    0.000 sre_compile.py:598(_code)
+        8    0.000    0.000    0.000    0.000 {built-in method builtins.print}
+      6/2    0.000    0.000    0.000    0.000 sre_compile.py:71(_compile)
+       10    0.000    0.000    0.000    0.000 valve.py:32(_get_edges)
+        3    0.000    0.000    0.000    0.000 part1Solution.py:15(update_sources)
+        2    0.000    0.000    0.000    0.000 sre_compile.py:536(_compile_info)
+       27    0.000    0.000    0.000    0.000 part1Solution.py:5(remove_unnecessary_edges)
+       20    0.000    0.000    0.000    0.000 {method 'findall' of 're.Pattern' objects}
+      198    0.000    0.000    0.000    0.000 {method 'append' of 'list' objects}
+       25    0.000    0.000    0.000    0.000 sre_parse.py:254(get)
+      8/4    0.000    0.000    0.000    0.000 sre_parse.py:174(getwidth)
+       35    0.000    0.000    0.000    0.000 sre_parse.py:164(__getitem__)
+        2    0.000    0.000    0.000    0.000 sre_compile.py:276(_optimize_charset)
+        7    0.000    0.000    0.000    0.000 valve.py:21(__repr__)
+      4/2    0.000    0.000    0.000    0.000 sre_compile.py:461(_get_literal_prefix)
+       32    0.000    0.000    0.000    0.000 valve.py:5(__init__)
+       31    0.000    0.000    0.000    0.000 sre_parse.py:233(__next)
+        2    0.000    0.000    0.000    0.000 sre_parse.py:96(closegroup)
+        2    0.000    0.000    0.000    0.000 enum.py:938(__and__)
+    98/92    0.000    0.000    0.000    0.000 {built-in method builtins.len}
+       67    0.000    0.000    0.000    0.000 {built-in method builtins.isinstance}
+        2    0.000    0.000    0.000    0.000 sre_parse.py:432(_uniq)
+       10    0.000    0.000    0.000    0.000 sre_parse.py:286(tell)
+        4    0.000    0.000    0.000    0.000 enum.py:313(__call__)
+       10    0.000    0.000    0.000    0.000 {method 'split' of 'str' objects}
+        2    0.000    0.000    0.000    0.000 sre_parse.py:224(__init__)
+       14    0.000    0.000    0.000    0.000 sre_parse.py:249(match)
+        2    0.000    0.000    0.000    0.000 sre_compile.py:432(_generate_overlap_table)
+       14    0.000    0.000    0.000    0.000 valve.py:9(__repr__)
+        2    0.000    0.000    0.000    0.000 sre_parse.py:84(opengroup)
+        2    0.000    0.000    0.000    0.000 sre_compile.py:423(_simple)
+       14    0.000    0.000    0.000    0.000 {built-in method builtins.min}
+       10    0.000    0.000    0.000    0.000 sre_parse.py:160(__len__)
+        8    0.000    0.000    0.000    0.000 sre_parse.py:81(groups)
+        2    0.000    0.000    0.000    0.000 sre_compile.py:249(_compile_charset)
+        4    0.000    0.000    0.000    0.000 sre_compile.py:595(isstring)
+        6    0.000    0.000    0.000    0.000 sre_parse.py:111(__init__)
+       10    0.000    0.000    0.000    0.000 {method 'replace' of 'str' objects}
+        6    0.000    0.000    0.000    0.000 {method 'find' of 'bytearray' objects}
+       17    0.000    0.000    0.000    0.000 {built-in method builtins.ord}
+        4    0.000    0.000    0.000    0.000 enum.py:631(__new__)
+        2    0.000    0.000    0.000    0.000 sre_parse.py:921(fix_flags)
+        2    0.000    0.000    0.000    0.000 {built-in method _sre.compile}
+        4    0.000    0.000    0.000    0.000 sre_compile.py:65(_combine_flags)
+        2    0.000    0.000    0.000    0.000 {built-in method fromkeys}
+        2    0.000    0.000    0.000    0.000 sre_parse.py:76(__init__)
+        4    0.000    0.000    0.000    0.000 sre_compile.py:453(_get_iscased)
+        6    0.000    0.000    0.000    0.000 {method 'items' of 'dict' objects}
+        6    0.000    0.000    0.000    0.000 {method 'extend' of 'list' objects}
+        2    0.000    0.000    0.000    0.000 sre_parse.py:168(__setitem__)
+        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
+        1    0.000    0.000    0.000    0.000 {method 'copy' of 'dict' objects}
+        1    0.000    0.000    0.000    0.000 {method 'values' of 'dict' objects}
+
+
+
+Process finished with exit code 0
