@@ -1,6 +1,4 @@
 import re
-from collections import defaultdict
-
 
 max_coord = 4000000
 
@@ -13,7 +11,7 @@ def get_manhat_dist(sensor, beacon):
     return abs(sensor[0] - beacon[0]) + abs(sensor[1] - beacon[1])
 
 
-def cover_full_manhat_dist(allowed, center, target_y, dist):
+def cover_full_manhat_dist(center, target_y, dist):
     global max_coord
     if target_y < center[1] - dist or center[1] + dist < target_y:
         return
@@ -22,9 +20,7 @@ def cover_full_manhat_dist(allowed, center, target_y, dist):
     x_dist = dist - abs(y_dist)
     x_start = max(center[0] - x_dist, 0)
     x_end = min(center[0] + x_dist, max_coord)
-    for x in range(x_start, x_end + 1, 1):
-        if x in allowed:
-            allowed.remove(x)
+    return [x_start, x_end]
 
 
 def print_cavern(cavern):
@@ -38,7 +34,6 @@ def print_cavern(cavern):
 
 
 def main(lines):
-    # got to 190
     global max_coord
     combos = []
     for line in lines:
@@ -48,21 +43,38 @@ def main(lines):
         beacon = convert_to_int(beacon_raw)
         combos.append([sensor, beacon])
 
+    found_x = 0
+    found_y = 0
     for y in range(max_coord + 1):
-        temp = set()
-        for i in range(max_coord + 1):
-            temp.add(i)
+        pairs = []
 
         for sensor, beacon in combos:
             manhat_dist = get_manhat_dist(sensor, beacon)
-            cover_full_manhat_dist(temp, sensor, y, manhat_dist)
+            temp = cover_full_manhat_dist(sensor, y, manhat_dist)
+            if temp is not None:
+                pairs.append(temp)
 
-        if len(temp) > 0:
-            print("y", y, "x", temp)
-            exit()
+        pairs.sort(key=lambda x: x[0])
+        while len(pairs) != 1:
+            first = pairs.pop(0)
+            second = pairs.pop(0)
+            if second[0] - 1 <= first[1] <= second[1]:
+                new = [first[0], second[1]]
+                pairs.insert(0, new)
+            elif second[1] < first[1]:
+                pairs.insert(0, first)
+            else:
+                pairs.insert(0, first)
+                pairs.insert(1, second)
+                break
 
-        if y % 1 == 0:
-            print(y)
+        if len(pairs) > 1:
+            found_x = pairs[0][1] + 1
+            found_y = y
+            break
 
-    # do work here
-    print("solution is day1 .....")
+        if y % 10000 == 0:
+            print("progress", y / max_coord * 100, "%")
+
+    print("found at", found_x, found_y)
+    print("goal frequency", (found_x * max_coord) + found_y)
