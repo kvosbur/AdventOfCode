@@ -41,15 +41,14 @@ def main(lines):
         sensor_raw, beacon_raw = reg.findall(line)
         sensor = convert_to_int(sensor_raw)
         beacon = convert_to_int(beacon_raw)
-        combos.append([sensor, beacon])
+        combos.append([sensor, beacon, get_manhat_dist(sensor, beacon)])
 
     found_x = 0
     found_y = 0
     for y in range(max_coord + 1):
         pairs = []
 
-        for sensor, beacon in combos:
-            manhat_dist = get_manhat_dist(sensor, beacon)
+        for sensor, beacon, manhat_dist in combos:
             temp = cover_full_manhat_dist(sensor, y, manhat_dist)
             if temp is not None:
                 pairs.append(temp)
@@ -73,7 +72,7 @@ def main(lines):
             found_y = y
             break
 
-        if y % 10000 == 0:
+        if y % 20000 == 0:
             print("progress", y / max_coord * 100, "%")
 
     print("found at", found_x, found_y)
