@@ -59,5 +59,3 @@ def main(lines):
 
     # print_cavern(cavern)
     print(len(cavern[2000000]))
-    # do work here
-    print("solution is day1 .....")
