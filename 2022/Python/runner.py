@@ -40,7 +40,7 @@ if __name__ == "__main__":
             cProfile.run('module.main(lines)', profile_result_file)
 
             p = pstats.Stats(profile_result_file)
-            p.strip_dirs().sort_stats(SortKey.CALLS).print_stats()
+            p.strip_dirs().sort_stats(SortKey.CUMULATIVE).print_stats()
             os.remove(profile_result_file)
 
         else:

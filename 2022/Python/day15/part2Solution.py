@@ -17,9 +17,19 @@ def cover_full_manhat_dist(center, target_y, dist):
         return
 
     y_dist = target_y - center[1]
-    x_dist = dist - abs(y_dist)
-    x_start = max(center[0] - x_dist, 0)
-    x_end = min(center[0] + x_dist, max_coord)
+    x_dist = dist - y_dist
+    if y_dist < 0:
+        x_dist = dist + y_dist
+    # x_dist = dist - abs(y_dist)
+    # x_start = max(center[0] - x_dist, 0)
+    x_start = center[0] - x_dist
+    if x_start < 0:
+        x_start = 0
+    # x_end = min(center[0] + x_dist, max_coord)
+    x_end = center[0] + x_dist
+    if x_end > max_coord:
+        x_end = max_coord
+
     return [x_start, x_end]
 
 
@@ -54,21 +64,33 @@ def main(lines):
                 pairs.append(temp)
 
         pairs.sort(key=lambda x: x[0])
-        while len(pairs) != 1:
-            first = pairs.pop(0)
-            second = pairs.pop(0)
-            if second[0] - 1 <= first[1] <= second[1]:
-                new = [first[0], second[1]]
-                pairs.insert(0, new)
-            elif second[1] < first[1]:
-                pairs.insert(0, first)
+        first = pairs[0]
+        results = []
+        for pair in pairs[1:]:
+            if pair[0] - 1 <= first[1] <= pair[1]:
+                new = [first[0], pair[1]]
+                first = new
+            elif pair[1] < first[1]:
+                pass
             else:
-                pairs.insert(0, first)
-                pairs.insert(1, second)
+                results.append(first)
+                results.append(pair)
                 break
+        # while len(pairs) != 1:
+        #     first = pairs.pop(0)
+        #     second = pairs.pop(0)
+        #     if second[0] - 1 <= first[1] <= second[1]:
+        #         new = [first[0], second[1]]
+        #         pairs.insert(0, new)
+        #     elif second[1] < first[1]:
+        #         pairs.insert(0, first)
+        #     else:
+        #         pairs.insert(0, first)
+        #         pairs.insert(1, second)
+        #         break
 
-        if len(pairs) > 1:
-            found_x = pairs[0][1] + 1
+        if len(results) > 1:
+            found_x = results[0][1] + 1
             found_y = y
             break
 
@@ -77,3 +99,11 @@ def main(lines):
 
     print("found at", found_x, found_y)
     print("goal frequency", (found_x * max_coord) + found_y)
+
+    # found
+    # at
+    # 2655411
+    # 3166538
+    # goal
+    # frequency
+    # 10621647166538
