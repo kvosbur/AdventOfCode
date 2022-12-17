@@ -1,6 +1,6 @@
 from .valve import Valve, Edge
 from typing import List, Dict
-from copy import deepcopy
+from pprint import pprint
 
 
 def remove_unnecessary_edges(valve, removed):
@@ -69,12 +69,12 @@ def is_node_turned_on_in_visit(node: str, visited: set):
     return node in visited
 
 
-# visited array hold info as [amount to wait, flow_to_add_after_wait, visited_node_list]
-def brute_force(current: Valve, valves: Dict[str, Valve], first_visited: List,
-                second_visited: List, flow: int, temp_flow: int, time_remaining: int):
+# visited array hold info as [amount to wait, flow_to_add_after_wait, visited_node_list, current_base_node]
+def brute_force(valves: Dict[str, Valve], first_visited: List,
+                second_visited: List, flow: int, time_remaining: int):
     navigator = first_visited
     other_navigator = second_visited
-    if second_visited[0] < first_visited[0]:
+    if first_visited[0] is None or second_visited[0] < first_visited[0]:
         navigator = second_visited
         other_navigator = first_visited
 
@@ -84,24 +84,25 @@ def brute_force(current: Valve, valves: Dict[str, Valve], first_visited: List,
 
     new_time_remaining = time_remaining - navigator[0]
     new_flow = flow + (navigator[1] * new_time_remaining)
-    new_temp_flow = temp_flow + navigator[1]
-    new_other_navigator = deepcopy(other_navigator)
-    new_other_navigator[0] -= navigator[0]
+    new_other_navigator = other_navigator[:]
+    if new_other_navigator[0] is not None:
+        new_other_navigator[0] -= navigator[0]
 
     results = []
-    for edge in current.edges:
+    for edge in navigator[3].edges:
         # print("debug", flow, temp_flow, new_time_remaining, edge, first_visited, second_visited)
         if edge.destination in navigator[2] or edge.destination in other_navigator[2]:
             # print("rejected")
             continue
-        navigator_copy = deepcopy(navigator)
+        navigator_copy = navigator[:]
         next_valve = valves[edge.destination]
-        navigator_copy[0] = edge.weight
+        navigator_copy[0] = edge.weight + 1
         navigator_copy[1] = next_valve.flow
         navigator_copy[2] = navigator_copy[2] + [edge.destination]
+        navigator_copy[3] = next_valve
 
-        results += brute_force(next_valve, valves, navigator_copy, new_other_navigator,
-                               new_flow, new_temp_flow, new_time_remaining)
+        results += brute_force(valves, navigator_copy, new_other_navigator,
+                               new_flow, new_time_remaining)
 
     # filter results based on visited list
     # filtered = []
@@ -112,8 +113,12 @@ def brute_force(current: Valve, valves: Dict[str, Valve], first_visited: List,
     #         filtered.append(result)
 
     if len(results) == 0:
+        navigator[0] = None
+        if other_navigator[0] is not None:
+            return brute_force(valves, navigator, new_other_navigator,
+                               new_flow, new_time_remaining)
         # print("no results")
-        return [[flow, first_visited, second_visited]]
+        return [[new_flow, first_visited, second_visited]]
 
     best = results[0]
     for result in results[1:]:
@@ -147,6 +152,40 @@ def main(lines):
         print(valve)
 
     # BRUTE FORCE!!!!!!!
-    res = brute_force(valves["AA"], valves, [0, 0, ["AA"]], [0, 0, ["AA"]], 0, 0, 26)
+    # best so far 2536
+    source = valves["AA"]
+    list_valves = list(valves.keys())
+    results = []
+    for first_index in range(len(list_valves)):
+        first_valve_key = list_valves[first_index]
+        if first_valve_key == "AA":
+            continue
+        first_valve = valves[first_valve_key]
+        weight = 0
+        for edge in source.edges:
+            if edge.destination == first_valve_key:
+                weight = edge.weight + 1
+        first_entry = [weight, first_valve.flow, ["AA", first_valve_key], first_valve]
+        for second_index in range(first_index + 1, len(list_valves)):
+            second_valve_key = list_valves[second_index]
+            if second_valve_key == "AA" or second_valve_key == first_valve_key:
+                continue
+            second_valve = valves[second_valve_key]
+            second_weight = 0
+            for edge in source.edges:
+                if edge.destination == second_valve_key:
+                    second_weight = edge.weight + 1
+
+            second_entry = [second_weight, second_valve.flow, ["AA", second_valve_key], second_valve]
+            print(first_entry, second_entry)
+
+            results += brute_force(valves, first_entry, second_entry, 0, 26)
+
+    best_so_far = [0]
+    for res in results:
+        if res[0] > best_so_far[0]:
+            best_so_far = res
+
+    # res = brute_force(valves, [0, 0, ["AA"], valves["AA"]], [0, 0, ["AA"], valves["AA"]], 0, 26)
     print("best results")
-    print(res)
+    print(best_so_far)
