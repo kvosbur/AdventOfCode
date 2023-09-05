@@ -1,3 +1,3 @@
-module 2019/go
+module main
 
 go 1.21.0
