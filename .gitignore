@@ -127,6 +127,10 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
-
+ß
 # go executables
 *.exe
+
+*/**/*input.txt
+
+.DS_Store
