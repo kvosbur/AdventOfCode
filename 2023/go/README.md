@@ -1,0 +1,1 @@
+To run benchmark run: `go test *.go -bench=.`

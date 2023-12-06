@@ -19,6 +19,6 @@ func main() {
 	text, _ := io.ReadAll(f)
 
 	split := strings.Split(string(text), "\n")
-	sol := day4.Part2Solution(split)
-	fmt.Println("Solution:", sol)
+	day4.Part2Solution(split)
+	// fmt.Println("Solution:", sol)
 }
