@@ -1,6 +1,7 @@
 package day5
 
 import (
+	"adventUtil"
 	"fmt"
 	"os"
 	"strconv"
@@ -103,7 +104,7 @@ func mapSeedRanges(seedRanges []seedRange, mappings []rangeMapping) []seedRange 
 
 func Part2Solution(input []string) string {
 	seed_split := strings.Split(input[0], ":")
-	seeds := convertStringsToInts(strings.Split(seed_split[1], " "))
+	seeds := adventUtil.ConvertStringsToInts(strings.Split(seed_split[1], " "))
 	seedStructs := []seedRange{}
 	for i := 0; i < len(seeds); i += 2 {
 		seedStructs = append(seedStructs, seedRange{seeds[i], seeds[i] + seeds[i+1] - 1})
@@ -122,7 +123,7 @@ func Part2Solution(input []string) string {
 			mappings = []rangeMapping{}
 		} else {
 			// recived range Mapping
-			nums := convertStringsToInts(strings.Split(input[index], " "))
+			nums := adventUtil.ConvertStringsToInts(strings.Split(input[index], " "))
 			mappings = append(mappings, rangeMapping{nums[0], nums[1], nums[2]})
 		}
 	}

@@ -1,6 +1,7 @@
 package day5
 
 import (
+	"adventUtil"
 	"slices"
 	"strconv"
 	"strings"
@@ -10,18 +11,6 @@ var digits = []rune{'1', '2', '3', '4', '5', '6', '7', '8', '9', '0'}
 
 func isDigit(char rune) bool {
 	return slices.Contains(digits, char)
-}
-
-func convertStringsToInts(input []string) []int {
-	dest := []int{}
-	for _, str := range input {
-		if str == "" {
-			continue
-		}
-		num, _ := strconv.Atoi(strings.Trim(str, " "))
-		dest = append(dest, num)
-	}
-	return dest
 }
 
 func minInt(input []int) int {
@@ -66,7 +55,7 @@ seed 2 fertalizer -> water should be 49
 
 func Part1Solution(input []string) string {
 	seed_split := strings.Split(input[0], ":")
-	seeds := convertStringsToInts(strings.Split(seed_split[1], " "))
+	seeds := adventUtil.ConvertStringsToInts(strings.Split(seed_split[1], " "))
 	// fmt.Println("next seeds", seeds)
 
 	mappings := []rangeMapping{}
@@ -81,7 +70,7 @@ func Part1Solution(input []string) string {
 			mappings = []rangeMapping{}
 		} else {
 			// recived range Mapping
-			nums := convertStringsToInts(strings.Split(input[index], " "))
+			nums := adventUtil.ConvertStringsToInts(strings.Split(input[index], " "))
 			mappings = append(mappings, rangeMapping{nums[0], nums[1], nums[2]})
 		}
 	}
