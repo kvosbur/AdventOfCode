@@ -108,7 +108,7 @@ func Part2Solution(input []string) string {
 	for i := 0; i < len(seeds); i += 2 {
 		seedStructs = append(seedStructs, seedRange{seeds[i], seeds[i] + seeds[i+1] - 1})
 	}
-	fmt.Println("next seeds", seedStructs)
+	// fmt.Println("next seeds", seedStructs)
 
 	mappings := []rangeMapping{}
 	for index := 2; index < len(input); index++ {
@@ -116,7 +116,7 @@ func Part2Solution(input []string) string {
 			// received all mapping
 			// fmt.Println("next mappings", mappings)
 			seedStructs = mapSeedRanges(seedStructs, mappings)
-			fmt.Println("next seeds", index, len(seedStructs))
+			// fmt.Println("next seeds", index, len(seedStructs))
 		} else if !isDigit(rune(input[index][0])) {
 			// start of the next mapping
 			mappings = []rangeMapping{}
@@ -128,7 +128,7 @@ func Part2Solution(input []string) string {
 	}
 
 	seedStructs = mapSeedRanges(seedStructs, mappings)
-	fmt.Println("next seeds", len(seedStructs))
+	// fmt.Println("next seeds", len(seedStructs))
 	minimum := seedStructs[0].start
 	for _, ss := range seedStructs {
 		if ss.start < minimum {
