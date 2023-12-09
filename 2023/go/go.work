@@ -4,6 +4,7 @@ use (
 	.
 	./adventUtil
 	./day1
+	./day10
 	./day2
 	./day3
 	./day4
