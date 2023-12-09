@@ -1,7 +1,6 @@
 package day7
 
 import (
-	"fmt"
 	"slices"
 	"sort"
 	"strconv"
@@ -111,7 +110,7 @@ func Part2Solution(input []string) string {
 	winnings := 0
 	rank := len(ranked_hands)
 	for _, rh := range ranked_hands {
-		fmt.Println(rh)
+		// fmt.Println(rh)
 		winnings += (rh.h.bid * rank)
 		rank -= 1
 	}
