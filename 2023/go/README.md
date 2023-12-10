@@ -1,1 +1,2 @@
-To run benchmark run: `go test *.go -bench=.`
+To run benchmark run: `go test *.go -bench=. -benchtime=1000x`
+To run benchmark with profiling: `go test -cpuprofile cpu.prof -memprofile mem.prof *.go -bench=. -benchtime=100x`
