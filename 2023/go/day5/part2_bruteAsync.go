@@ -8,6 +8,17 @@ import (
 	"time"
 )
 
+func mapSeedImprovRef(seed int, mappings []*rangeMappingImprov) int {
+	for _, mapping := range mappings {
+		if seed >= mapping.source_start &&
+			seed < mapping.source_end {
+			distance := seed - mapping.source_start
+			return mapping.destination_start + distance
+		}
+	}
+	return seed
+}
+
 func Part2BruteAsyncSolution(input []string) string {
 	fmt.Println("Start", time.Now())
 	seed_split := strings.Split(input[0], ":")
@@ -21,10 +32,10 @@ func Part2BruteAsyncSolution(input []string) string {
 	for _, ss := range seedStructs {
 		sum += ss.end - ss.start
 	}
-	all_mappings := [][]rangeMappingImprov{}
+	all_mappings := [][]*rangeMappingImprov{}
 
 	// setup mappings
-	mappings := []rangeMappingImprov{}
+	mappings := []*rangeMappingImprov{}
 	for index := 2; index < len(input); index++ {
 		if input[index] == "" {
 			// received all mapping
@@ -33,11 +44,11 @@ func Part2BruteAsyncSolution(input []string) string {
 			// fmt.Println("next seeds", seeds)
 		} else if !isDigit(rune(input[index][0])) {
 			// start of the next mapping
-			mappings = []rangeMappingImprov{}
+			mappings = []*rangeMappingImprov{}
 		} else {
 			// recived range Mapping
 			nums := adventUtil.ConvertStringsToInts(strings.Split(input[index], " "))
-			mappings = append(mappings, rangeMappingImprov{nums[0], nums[1], nums[1] + nums[2]})
+			mappings = append(mappings, &rangeMappingImprov{nums[0], nums[1], nums[1] + nums[2]})
 		}
 	}
 	all_mappings = append(all_mappings, mappings)
@@ -45,11 +56,11 @@ func Part2BruteAsyncSolution(input []string) string {
 	c1 := make(chan int)
 	for _, ss := range seedStructs {
 		go func(ss2 seedRange) {
-			found_min := mapSeedImprov(ss2.start, mappings)
+			found_min := mapSeedImprovRef(ss2.start, mappings)
 			for seed := ss2.start; seed <= ss2.end; seed++ {
 				next_seed := seed
 				for _, mappings := range all_mappings {
-					next_seed = mapSeedImprov(next_seed, mappings)
+					next_seed = mapSeedImprovRef(next_seed, mappings)
 				}
 				if next_seed < found_min {
 					found_min = next_seed
@@ -72,4 +83,5 @@ func Part2BruteAsyncSolution(input []string) string {
 	fmt.Println("END time:", time.Now())
 	return strconv.Itoa(new_minimum)
 	// 53.405 parallelized
+	// 27992443
 }
