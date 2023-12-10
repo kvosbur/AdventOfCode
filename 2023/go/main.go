@@ -1,7 +1,7 @@
 package main
 
 import (
-	"day8"
+	"day10"
 	"fmt"
 	"io"
 	"os"
@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	f, err := os.Open("day8/input.txt")
+	f, err := os.Open("day10/input.txt")
 
 	if err != nil {
 		fmt.Println("Issue opening file:", err)
@@ -19,6 +19,6 @@ func main() {
 	text, _ := io.ReadAll(f)
 
 	split := strings.Split(string(text), "\n")
-	day8.Part2BruteSolution(split)
-	// fmt.Println("Solution:", sol)
+	sol := day10.Part2Solution(split)
+	fmt.Println("Solution:", sol)
 }
