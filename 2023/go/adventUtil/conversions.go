@@ -16,3 +16,24 @@ func ConvertStringsToInts(input []string) []int {
 	}
 	return dest
 }
+
+func MaxInt(a int, b int) int {
+	if a > b {
+		return a
+	}
+	return b
+}
+
+func MinInt(a int, b int) int {
+	if a < b {
+		return a
+	}
+	return b
+}
+
+func AbsoluteInt(input int) int {
+	if input < 0 {
+		return input * -1
+	}
+	return input
+}
