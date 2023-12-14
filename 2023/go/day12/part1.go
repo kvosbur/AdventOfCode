@@ -101,6 +101,9 @@ func Part1Solution(input []string) string {
 		groups := adventUtil.ConvertStringsToInts(strings.Split(split_line[1], ","))
 
 		temp := countArrangementsNoTracking(info, 0, 0, groups)
+		for k := range memorization {
+			delete(memorization, k)
+		}
 		// temp := countArrangements(info, 0, 0, groups, []int{})
 		fmt.Println(info, groups, temp)
 
