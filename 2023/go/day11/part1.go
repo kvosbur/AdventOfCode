@@ -69,7 +69,7 @@ func addHorizontalLineIfNecessary(input [][]string) [][]string {
 	return new_input
 }
 
-func printInput(split_input [][]string) {
+func PrintInput(split_input [][]string) {
 	for _, val := range split_input {
 		fmt.Println(val)
 	}
