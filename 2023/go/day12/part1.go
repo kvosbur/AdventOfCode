@@ -8,10 +8,6 @@ import (
 )
 
 func checkSubstringCanBeInMaintaince(info_line string, start int, end int) bool {
-	// sub := info_line[start:end]
-	// match, _ := regexp.Match("^[#\\?]*$", []byte(sub))
-	// return match
-
 	for i := start; i < end; i++ {
 		if info_line[i] == '.' {
 			return false

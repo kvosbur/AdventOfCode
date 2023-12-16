@@ -24,7 +24,7 @@ func Part2BruteSolution(input []string) string {
 		shiftAllWest(input_split)
 		shiftAllSouth(input_split)
 		shiftAllEast(input_split)
-		if i%1000000 == 0 {
+		if i%100000 == 0 {
 			fmt.Println(float64(i)/float64(cycle_count), time.Now())
 		}
 	}

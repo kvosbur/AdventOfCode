@@ -76,8 +76,7 @@ func shiftGraphRockNorth(node *Node) {
 	}
 }
 
-func shiftGraphAllNorth(input [][]*Node) {
-	start := input[0][0]
+func shiftGraphAllNorth(start *Node) {
 	for next_right := start; next_right != nil; next_right = next_right.right {
 		for next_down := next_right.down; next_down != nil; next_down = next_down.down {
 			if next_down.char == 'O' {
@@ -98,8 +97,7 @@ func shiftGraphRockSouth(node *Node) {
 	}
 }
 
-func shiftGraphAllSouth(input [][]*Node) {
-	start := input[len(input)-1][0]
+func shiftGraphAllSouth(start *Node) {
 	for next_right := start; next_right != nil; next_right = next_right.right {
 		for next_up := next_right.up; next_up != nil; next_up = next_up.up {
 			if next_up.char == 'O' {
@@ -120,8 +118,7 @@ func shiftGraphRockWest(node *Node) {
 	}
 }
 
-func shiftGraphAllWest(input [][]*Node) {
-	start := input[0][0]
+func shiftGraphAllWest(start *Node) {
 	for next_down := start; next_down != nil; next_down = next_down.down {
 		for next_right := next_down; next_right != nil; next_right = next_right.right {
 			if next_right.char == 'O' {
@@ -142,8 +139,7 @@ func shiftGraphRockEast(node *Node) {
 	}
 }
 
-func shiftGraphAllEast(input [][]*Node) {
-	start := input[0][len(input[0])-1]
+func shiftGraphAllEast(start *Node) {
 	for next_down := start; next_down != nil; next_down = next_down.down {
 		for next_left := next_down; next_left != nil; next_left = next_left.left {
 			if next_left.char == 'O' {
@@ -175,13 +171,17 @@ func Part2BruteGraphSolution(input []string) string {
 	fmt.Println("++++++++++++++")
 
 	nodes := makeGraph(input_split)
+	north_start := nodes[0][0]
+	west_start := nodes[0][0]
+	south_start := nodes[len(nodes)-1][0]
+	east_start := nodes[0][len(nodes[0])-1]
 
 	for i := 0; i < cycle_count; i++ {
-		shiftGraphAllNorth(nodes)
-		shiftGraphAllWest(nodes)
-		shiftGraphAllSouth(nodes)
-		shiftGraphAllEast(nodes)
-		if i%1000000 == 0 {
+		shiftGraphAllNorth(north_start)
+		shiftGraphAllWest(west_start)
+		shiftGraphAllSouth(south_start)
+		shiftGraphAllEast(east_start)
+		if i%100000 == 0 {
 			fmt.Println(float64(i)/float64(cycle_count), time.Now())
 		}
 	}
@@ -201,4 +201,11 @@ func Part2BruteGraphSolution(input []string) string {
 // 0.1 2023-12-14 22:49:04.26939 -0500 EST m=+46.850838779
 // 0.1 2023-12-14 22:51:15.202099 -0500 EST m=+45.261446818
 
-// graph but precompute start node
+// WITH FULL INPUT
+// exisitng
+// 0.0001 2023-12-14 22:59:19.928284 -0500 EST m=+17.033106495
+// 0.0002 2023-12-14 22:59:38.069107 -0500 EST m=+35.174147103
+
+// graphing
+//
+//

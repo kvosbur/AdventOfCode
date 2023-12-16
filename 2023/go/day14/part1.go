@@ -31,8 +31,8 @@ func scoreNorth(input [][]rune) int {
 
 func shiftAllNorth(input [][]rune) {
 	for x := 1; x < len(input); x++ {
-		for y := range input[x] {
-			if input[x][y] == 'O' && input[x-1][y] == '.' {
+		for y := range input[0] {
+			if input[x][y] == 'O' {
 				shiftRockNorth(input, x, y)
 			}
 		}
