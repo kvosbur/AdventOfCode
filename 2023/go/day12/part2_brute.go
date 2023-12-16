@@ -33,6 +33,25 @@ func checkSubstringCanBeInMaintainceBrute(info_line string, start int, end int) 
 	return true
 }
 
+func stringContainsChar(line string, char rune, start int, end int) bool {
+	for i := start; i < end; i++ {
+		if line[i] == byte(char) {
+			return true
+		}
+	}
+	return false
+}
+
+func stringCountChar(line string, char rune, start int, end int) int {
+	count := 0
+	for i := start; i < end; i++ {
+		if line[i] == byte(char) {
+			count += 1
+		}
+	}
+	return count
+}
+
 func countArrangementsNoMem(info_line string, info_index int, group_index int, groups []int) int {
 	current_group := groups[group_index]
 	if info_index+current_group > len(info_line) {
@@ -45,11 +64,12 @@ func countArrangementsNoMem(info_line string, info_index int, group_index int, g
 
 		if group_matches {
 			if group_index == len(groups)-1 {
-				if !strings.Contains(info_line[i+current_group:], "#") {
+
+				if !stringContainsChar(info_line, '#', i+current_group, len(info_line)) {
 					count++
 				}
 			} else {
-				current_question_mark_count := strings.Count(info_line[i:i+current_group], "?")
+				current_question_mark_count := stringCountChar(info_line, '?', i, i+current_group)
 				if i+current_group < len(info_line) && info_line[i+current_group] != '#' && !(last_questionmark_count == 0 && current_question_mark_count == 0) {
 					arrangement_count := countArrangementsNoMem(info_line, i+current_group+1, group_index+1, groups)
 					count += arrangement_count
@@ -83,7 +103,7 @@ func Part2BruteSolution(input []string) string {
 	return strconv.Itoa(total_sum)
 }
 
-//41.827s
-// 31.117
+// BenchmarkLong-12               1        31323413748 ns/op
+// BenchmarkLong-12               1        32215857070 ns/op
 
-// ( 948 / 1000 ) 2023-12-12 23:28:53.763695 -0500 EST m=+903.233555796
+// Switch away from strings.Contains
