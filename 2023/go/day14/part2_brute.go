@@ -8,6 +8,7 @@ import (
 
 func Part2BruteSolution(input []string) string {
 	input_split := [][]rune{}
+	// cycle_count := 50000000
 	cycle_count := 1000000000
 	for _, val := range input {
 		temp := []rune{}
@@ -32,3 +33,6 @@ func Part2BruteSolution(input []string) string {
 	value := scoreNorth(input_split)
 	return strconv.Itoa(value)
 }
+
+// BenchmarkLong-12               1        19057903631 ns/op
+// BenchmarkLong-12               1        18365607313 ns/op

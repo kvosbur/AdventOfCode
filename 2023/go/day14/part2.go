@@ -6,20 +6,21 @@ import (
 )
 
 func shiftRockSouth(input [][]rune, start_x int, y int) {
-	for x := start_x + 1; x < len(input); x++ {
-		if input[x][y] == '.' {
-			input[x][y] = 'O'
-			input[x-1][y] = '.'
-		} else {
-			return
+	x := start_x + 1
+	input[start_x][y] = '.'
+	for x < len(input) {
+		if input[x][y] != '.' {
+			break
 		}
+		x++
 	}
+	input[x-1][y] = 'O'
 }
 
 func shiftAllSouth(input [][]rune) {
 	for x := len(input) - 2; x >= 0; x-- {
-		for y := range input[0] {
-			if input[x][y] == 'O' {
+		for y, val := range input[x] {
+			if val == 'O' {
 				shiftRockSouth(input, x, y)
 			}
 		}
@@ -27,14 +28,16 @@ func shiftAllSouth(input [][]rune) {
 }
 
 func shiftRockWest(input [][]rune, x int, start_y int) {
-	for y := start_y - 1; y >= 0; y-- {
-		if input[x][y] == '.' {
-			input[x][y] = 'O'
-			input[x][y+1] = '.'
-		} else {
-			return
+	y := start_y - 1
+	row := input[x]
+	row[start_y] = '.'
+	for y >= 0 {
+		if row[y] != '.' {
+			break
 		}
+		y--
 	}
+	row[y+1] = 'O'
 }
 
 func shiftAllWest(input [][]rune) {
@@ -48,14 +51,16 @@ func shiftAllWest(input [][]rune) {
 }
 
 func shiftRockEast(input [][]rune, x int, start_y int) {
-	for y := start_y + 1; y < len(input[0]); y++ {
-		if input[x][y] == '.' {
-			input[x][y] = 'O'
-			input[x][y-1] = '.'
-		} else {
-			return
+	y := start_y + 1
+	row := input[x]
+	row[start_y] = '.'
+	for y < len(row) {
+		if row[y] != '.' {
+			break
 		}
+		y++
 	}
+	row[y-1] = 'O'
 }
 
 func shiftAllEast(input [][]rune) {

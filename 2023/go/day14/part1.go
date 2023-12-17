@@ -1,18 +1,20 @@
 package day14
 
 import (
+	"fmt"
 	"strconv"
 )
 
 func shiftRockNorth(input [][]rune, start_x int, y int) {
-	for x := start_x - 1; x >= 0; x-- {
-		if input[x][y] == '.' {
-			input[x][y] = 'O'
-			input[x+1][y] = '.'
-		} else {
-			return
+	x := start_x - 1
+	input[start_x][y] = '.'
+	for x >= 0 {
+		if input[x][y] != '.' {
+			break
 		}
+		x--
 	}
+	input[x+1][y] = 'O'
 }
 
 func scoreNorth(input [][]rune) int {
@@ -31,11 +33,20 @@ func scoreNorth(input [][]rune) int {
 
 func shiftAllNorth(input [][]rune) {
 	for x := 1; x < len(input); x++ {
-		for y := range input[0] {
-			if input[x][y] == 'O' {
+		for y, val := range input[x] {
+			if val == 'O' {
 				shiftRockNorth(input, x, y)
 			}
 		}
+	}
+}
+
+func printInput(split_input [][]rune) {
+	for _, row := range split_input {
+		for _, col := range row {
+			fmt.Print(string(col))
+		}
+		fmt.Println("")
 	}
 }
 
@@ -50,6 +61,8 @@ func Part1Solution(input []string) string {
 	}
 
 	shiftAllNorth(input_split)
+
+	printInput(input_split)
 
 	value := scoreNorth(input_split)
 	return strconv.Itoa(value)
