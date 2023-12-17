@@ -36,7 +36,6 @@ type bfsItem struct {
 	direction     Direction
 }
 
-var count = 0
 var bestVal = math.MaxInt
 
 func printGraph(graph [][]*node) {
@@ -50,23 +49,22 @@ func printGraph(graph [][]*node) {
 
 func getEndDirections(input_direction Direction, straight_left int) []Direction {
 	directions := []Direction{}
-	if input_direction == North {
-		directions = append(directions, West)
-		directions = append(directions, East)
-	} else if input_direction == East {
-		directions = append(directions, North)
-		directions = append(directions, South)
-	} else if input_direction == South {
-		directions = append(directions, West)
-		directions = append(directions, East)
-	} else {
-		// input_direction == West
-		directions = append(directions, North)
-		directions = append(directions, South)
-	}
-
 	if straight_left > 0 {
 		directions = append(directions, input_direction)
+	}
+	if input_direction == North {
+		directions = append(directions, East)
+		directions = append(directions, West)
+	} else if input_direction == East {
+		directions = append(directions, South)
+		directions = append(directions, North)
+	} else if input_direction == South {
+		directions = append(directions, East)
+		directions = append(directions, West)
+	} else {
+		// input_direction == West
+		directions = append(directions, South)
+		directions = append(directions, North)
 	}
 	return directions
 }
@@ -111,10 +109,6 @@ func getLowestHeatLoss(graph [][]*node, x int, y int, direction Direction, heat_
 	node_at_position := graph[x][y]
 
 	if x == len(graph)-1 && y == len(graph[0])-1 {
-		count++
-		if count%10000 == 0 {
-			fmt.Println(count, bestVal)
-		}
 		if heat_loss+node_at_position.heat_loss < bestVal {
 			bestVal = heat_loss + node_at_position.heat_loss
 		}
