@@ -237,6 +237,7 @@ func makeGraphCopy(input []string) [][]*node {
 }
 
 func Part1Solution(input []string) string {
+	bestVal = math.MaxInt
 	graph := makeGraphCopy(input)
 
 	lowest_heat_loss := getLowestHeatLoss(graph, 0, 0, East, -graph[0][0].heat_loss, 3)
