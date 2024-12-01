@@ -1,6 +1,7 @@
-use crate::part1_solution;
+use crate::days::day1::part1_solution;
+
 #[test]
-fn it_works() {
+fn example() {
     let inputs = "3   4
 4   3
 2   5
