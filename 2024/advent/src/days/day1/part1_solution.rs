@@ -1,3 +1,4 @@
+#[allow(dead_code)]
 pub fn solve(inputs: &Vec<String>) -> String {
     let mut left: Vec<i32> = Vec::new();
     let mut right: Vec<i32> = Vec::new();

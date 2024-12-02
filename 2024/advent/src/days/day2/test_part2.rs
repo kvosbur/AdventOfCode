@@ -1,5 +1,5 @@
 #[allow(unused_imports)]
-use crate::days::day1::part1_solution;
+use crate::days::day2::part2_solution;
 
 #[test]
 fn example() {
@@ -12,6 +12,6 @@ fn example() {
         .split("\n")
         .map(|temp: &str| -> String { temp.to_string() })
         .collect();
-    let result = part1_solution::solve(&inputs);
-    assert_eq!(result, "11")
+    let result = part2_solution::solve(&inputs);
+    assert_eq!(result, "31")
 }

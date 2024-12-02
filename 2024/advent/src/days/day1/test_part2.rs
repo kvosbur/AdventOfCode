@@ -1,3 +1,4 @@
+#[allow(unused_imports)]
 use crate::days::day1::part2_solution;
 
 #[test]
