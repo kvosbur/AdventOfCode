@@ -1,6 +1,6 @@
 mod days;
 
-use days::day2::part2_solution;
+use days::day3::part1_solution;
 use std::fs;
 
 pub struct Config {
@@ -23,8 +23,13 @@ impl Config {
     }
 }
 
-pub fn run(config: Config) {
+pub fn run() {
+    let input_filename = String::from("inputs/day3/input.txt");
+    let config = Config {
+        profile: true,
+        file_path: input_filename,
+    };
     let lines = config.read_file_to_vector_lines();
-    let sol = part2_solution::solve(&lines);
+    let sol = part1_solution::solve(&lines);
     println!("Solution is: {}", sol);
 }
