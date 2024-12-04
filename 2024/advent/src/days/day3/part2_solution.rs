@@ -1,58 +1,56 @@
-fn are_safe_values(value_1: i32, value_2: i32, direction: i32) -> bool {
-    let difference = value_2 - value_1;
-    // handle case where values can only step by 1 - 3
-    if difference.abs() < 1 || difference.abs() > 3 {
-        return false;
-    }
+use regex::Regex;
 
-    // handle only increasing/decreasing check
-    if difference > 0 && direction == -1 {
-        return false;
-    }
-    if difference < 0 && direction == 1 {
-        return false;
-    }
-    return true;
-}
+fn get_sum_for_slice(search: &str) -> i32 {
+    let re = Regex::new(r"mul\(([0-9]{1,3}),([0-9]{1,3})\)").unwrap();
+    let mut sum = 0;
+    for m in re.captures_iter(&search) {
+        let first_num: i32 = m.get(1).unwrap().as_str().parse().unwrap();
+        let second_num: i32 = m.get(2).unwrap().as_str().parse().unwrap();
 
-fn line_is_safe(items: &Vec<i32>) -> bool {
-    let direction = if items[1] - items[0] > 0 { 1 } else { -1 };
-    for value_index in 1..items.len() {
-        if !are_safe_values(items[value_index - 1], items[value_index], direction) {
-            return false;
-        }
+        sum += first_num * second_num
     }
-    return true;
+    sum
 }
 
 #[allow(dead_code)]
 pub fn solve(inputs: &Vec<String>) -> String {
-    let mut safe_count = 0;
+    let mut cumulative_sum = 0;
 
     for line in inputs {
-        let split: Vec<i32> = line
-            .split(" ")
-            .map(|item| item.parse::<i32>().unwrap())
-            .collect();
-
-        let is_safe = line_is_safe(&split);
-        if is_safe {
-            safe_count += 1;
-            continue;
-        }
-
-        //try removing one index at a time
-        for delete_index in 0..split.len() {
-            let mut cloned = split.clone();
-            cloned.remove(delete_index);
-
-            let is_safe = line_is_safe(&cloned);
-            if is_safe {
-                safe_count += 1;
-                break;
+        println!("----------------line diff --------------");
+        let mut index = 0;
+        let mut enabled = true;
+        while index < line.len() {
+            if enabled {
+                let next_bad_index = line[index..].find("don't()");
+                let next_index = match next_bad_index {
+                    None => line.len(),
+                    Some(i) => index + i + 7,
+                };
+                println!(
+                    "do sum for {} to {}, {} {}",
+                    index,
+                    next_index,
+                    line.len(),
+                    &line[index..next_index]
+                );
+                cumulative_sum += get_sum_for_slice(&line[index..next_index]);
+                index = next_index;
+                enabled = false;
+            } else {
+                let next_good_index = line[index..].find("do()");
+                let next_index = match next_good_index {
+                    None => line.len(),
+                    Some(i) => index + i + 4,
+                };
+                index = next_index;
+                enabled = true;
             }
         }
     }
 
-    return format!("{}", safe_count);
+    cumulative_sum.to_string()
 }
+
+// too high 92974346
+// original 185797128

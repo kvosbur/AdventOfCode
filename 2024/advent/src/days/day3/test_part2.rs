@@ -1,27 +1,24 @@
 #[allow(unused_imports)]
-use crate::days::day2::part2_solution;
+use crate::days::day3::part2_solution;
 
 #[test]
 fn example() {
-    let inputs = "7 6 4 2 1
-1 2 7 8 9
-9 7 6 2 1
-1 3 2 4 5
-8 6 4 4 1
-1 3 6 7 9"
+    let inputs = "xmul(2,4)&mul[3,7]!^don't()_mul(5,5)+mul(32,64](mul(11,8)undo()?mul(8,5))
+    xmul(2,4)&mul[3,7]!^don't()_mul(5,5)+mul(32,64](mul(11,8)undo()?mul(8,5))"
         .split("\n")
         .map(|temp: &str| -> String { temp.to_string() })
         .collect();
     let result = part2_solution::solve(&inputs);
-    assert_eq!(result, "4")
+    assert_eq!(result, "96")
 }
 
 #[test]
-fn special_case_1() {
-    let inputs = "8 2 3 5 6"
-        .split("\n")
-        .map(|temp: &str| -> String { temp.to_string() })
-        .collect();
+fn break_the_thing() {
+    let inputs =
+        "xmul(2,4)& do() mul(2,4)mul(2,4)mul[3,7]!^don't()_mul(5,5)+mul(32,64](mul(11,8)undo()?mul(2,4)mul(2,4)don't()mul(2,4)do()mul(2,4)do()mul(2,4)"
+            .split("\n")
+            .map(|temp: &str| -> String { temp.to_string() })
+            .collect();
     let result = part2_solution::solve(&inputs);
-    assert_eq!(result, "1")
+    assert_eq!(result, "56")
 }
