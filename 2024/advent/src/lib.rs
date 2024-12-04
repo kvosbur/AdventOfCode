@@ -1,6 +1,6 @@
 mod days;
 
-use days::day3::part2_solution;
+use days::day4::part2_solution;
 use std::fs;
 
 pub struct Config {
@@ -24,7 +24,7 @@ impl Config {
 }
 
 pub fn run() {
-    let input_filename = String::from("inputs/day3/input.txt");
+    let input_filename = String::from("inputs/day4/input.txt");
     let config = Config {
         profile: true,
         file_path: input_filename,
