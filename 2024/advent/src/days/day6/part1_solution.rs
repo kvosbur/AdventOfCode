@@ -1,4 +1,3 @@
-use core::str;
 use std::collections::HashMap;
 
 fn get_beginning_state(characters: &Vec<&[u8]>) -> (usize, usize, u32) {
@@ -48,13 +47,6 @@ fn do_movements(
 
     let mut moving = true;
     while moving {
-        // println!(
-        //     "direction:{}  x:{}, y:{}, char: {}",
-        //     direction,
-        //     x,
-        //     y,
-        //     str::from_utf8(&[characters[x][y]]).unwrap()
-        // );
         match direction {
             0 => {
                 // up
@@ -133,7 +125,7 @@ pub fn solve(inputs: &Vec<String>) -> String {
     let input_chars: Vec<&[u8]> = inputs.iter().map(|s| s.as_bytes()).collect();
 
     let begin_state = get_beginning_state(&input_chars);
-    // insert start location
+
     do_movements(&input_chars, &mut location_counts, begin_state);
 
     let spot_counts = location_counts.keys().count();
