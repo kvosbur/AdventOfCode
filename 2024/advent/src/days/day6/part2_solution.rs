@@ -2,7 +2,7 @@ use std::collections::HashSet;
 use std::sync::mpsc::{self, Sender};
 use std::thread;
 
-fn get_beginning_state(characters: &Vec<Vec<u8>>) -> (usize, usize, u32) {
+fn get_beginning_state(characters: &Vec<Vec<u8>>) -> (usize, usize, usize) {
     for row_index in 0..characters.len() {
         let row = &characters[row_index];
         for value_index in 0..row.len() {
@@ -33,16 +33,18 @@ fn get_direction_key(first_index: usize, second_index: usize, direction: u32) ->
 
 fn does_movements_cause_cycle(
     characters: &Vec<Vec<u8>>,
-    initial_state: &(usize, usize, u32),
+    initial_state: &(usize, usize, usize),
 ) -> bool {
     let mut x = initial_state.0;
     let mut y = initial_state.1;
-    let mut direction = initial_state.2;
-    let mut seen_locations: HashSet<String> = HashSet::new();
+    let mut direction: usize = initial_state.2;
+    let mut seen_locations: HashSet<usize> = HashSet::new();
+    let double_len = characters.len() * 10;
 
     let mut moving = true;
     while moving {
-        let key = get_direction_key(x, y, direction);
+        // let key = get_direction_key(x, y, direction);
+        let key = (x * double_len) + (y * 10) + direction;
         if seen_locations.get(&key).is_some() {
             return true;
         }
@@ -114,7 +116,7 @@ fn thread_work(
     start_x: usize,
     end_x: usize,
     mut input_chars: Vec<Vec<u8>>,
-    begin_state: &(usize, usize, u32),
+    begin_state: &(usize, usize, usize),
     tx: Sender<i32>,
 ) {
     let mut good_locations = 0;
@@ -135,7 +137,7 @@ fn thread_work(
 #[allow(dead_code)]
 pub fn solve(inputs: &Vec<String>) -> String {
     let input_chars: Vec<Vec<u8>> = inputs.iter().map(|s| s.clone().into_bytes()).collect();
-    let thread_count = 7;
+    let thread_count = 8;
     let begin_state = get_beginning_state(&input_chars);
     let (tx, rx) = mpsc::channel();
 
