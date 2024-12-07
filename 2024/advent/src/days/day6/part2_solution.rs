@@ -22,15 +22,7 @@ fn get_beginning_state(characters: &Vec<Vec<u8>>) -> (usize, usize, usize) {
     return (0, 0, 0);
 }
 
-fn get_direction_key(first_index: usize, second_index: usize, direction: u32) -> String {
-    let mut key = first_index.to_string();
-    key.push_str(",");
-    key.push_str(&second_index.to_string());
-    key.push_str(",");
-    key.push_str(&direction.to_string());
-    key
-}
-
+#[allow(unused_assignments)]
 fn does_movements_cause_cycle(
     characters: &Vec<Vec<u8>>,
     initial_state: &(usize, usize, usize),

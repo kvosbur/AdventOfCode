@@ -36,6 +36,7 @@ fn increment_count(counts: &mut HashMap<String, u32>, key: String) {
         .or_insert(1);
 }
 
+#[allow(unused_assignments)]
 fn do_movements(
     characters: &Vec<&[u8]>,
     counts: &mut HashMap<String, u32>,
