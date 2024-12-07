@@ -1,3 +1,14 @@
+fn combine_values(first: u64, second: u64) -> u64 {
+    let mut factor = 1;
+    loop {
+        factor *= 10;
+        if factor > second {
+            break;
+        }
+    }
+    first * factor + second
+}
+
 fn combinations(
     target_value: u64,
     current_value: u64,
@@ -22,11 +33,9 @@ fn combinations(
         next_index,
         values,
     );
-    let mut concat_value = current_value.to_string();
-    concat_value.push_str(&values[next_index].to_string());
     combo_counts += combinations(
         target_value,
-        concat_value.parse().unwrap(),
+        combine_values(current_value, values[next_index]),
         next_index,
         values,
     );
