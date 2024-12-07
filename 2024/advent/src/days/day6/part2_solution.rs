@@ -1,4 +1,6 @@
-use std::collections::HashMap;
+use std::collections::HashSet;
+use std::sync::mpsc::{self, Sender};
+use std::thread;
 
 fn get_beginning_state(characters: &Vec<Vec<u8>>) -> (usize, usize, u32) {
     for row_index in 0..characters.len() {
@@ -20,49 +22,30 @@ fn get_beginning_state(characters: &Vec<Vec<u8>>) -> (usize, usize, u32) {
     return (0, 0, 0);
 }
 
-fn get_key(first_index: usize, second_index: usize) -> String {
+fn get_direction_key(first_index: usize, second_index: usize, direction: u32) -> String {
     let mut key = first_index.to_string();
     key.push_str(",");
     key.push_str(&second_index.to_string());
+    key.push_str(",");
+    key.push_str(&direction.to_string());
     key
-}
-
-fn add_seen_location(counts: &mut HashMap<String, Vec<u32>>, key: String, direction: u32) {
-    counts
-        .entry(key)
-        .and_modify(|entry| entry.push(direction))
-        .or_insert(vec![direction]);
 }
 
 fn does_movements_cause_cycle(
     characters: &Vec<Vec<u8>>,
-    initial_state: (usize, usize, u32),
+    initial_state: &(usize, usize, u32),
 ) -> bool {
     let mut x = initial_state.0;
     let mut y = initial_state.1;
     let mut direction = initial_state.2;
-    let mut seen_locations: HashMap<String, Vec<u32>> = HashMap::new();
+    let mut seen_locations: HashSet<String> = HashSet::new();
 
     let mut moving = true;
     while moving {
-        let key = get_key(x, y);
-        let has_seen_location = seen_locations.get(&key);
-        if has_seen_location.is_some() {
-            if has_seen_location
-                .unwrap()
-                .iter()
-                .any(|dir| *dir == direction)
-            {
-                return true;
-            }
+        let key = get_direction_key(x, y, direction);
+        if seen_locations.get(&key).is_some() {
+            return true;
         }
-        // println!(
-        //     "direction:{}  x:{}, y:{}, char: {}",
-        //     direction,
-        //     x,
-        //     y,
-        //     str::from_utf8(&[characters[x][y]]).unwrap()
-        // );
         match direction {
             0 => {
                 // up
@@ -71,13 +54,12 @@ fn does_movements_cause_cycle(
                     break;
                 }
                 let next_x = x - 1;
-                let next_y = y;
-                if characters[next_x][next_y] == b'#' {
+
+                if characters[next_x][y] == b'#' {
                     direction = 1;
                 } else {
-                    add_seen_location(&mut seen_locations, get_key(x, y), direction);
+                    seen_locations.insert(key);
                     x = next_x;
-                    y = next_y;
                 }
             }
             1 => {
@@ -86,13 +68,11 @@ fn does_movements_cause_cycle(
                     moving = false;
                     break;
                 }
-                let next_x = x;
                 let next_y = y + 1;
-                if characters[next_x][next_y] == b'#' {
+                if characters[x][next_y] == b'#' {
                     direction = 2;
                 } else {
-                    add_seen_location(&mut seen_locations, get_key(x, y), direction);
-                    x = next_x;
+                    seen_locations.insert(key);
                     y = next_y;
                 }
             }
@@ -103,13 +83,11 @@ fn does_movements_cause_cycle(
                     break;
                 }
                 let next_x = x + 1;
-                let next_y = y;
-                if characters[next_x][next_y] == b'#' {
+                if characters[next_x][y] == b'#' {
                     direction = 3;
                 } else {
-                    add_seen_location(&mut seen_locations, get_key(x, y), direction);
+                    seen_locations.insert(key);
                     x = next_x;
-                    y = next_y;
                 }
             }
             3 => {
@@ -118,13 +96,11 @@ fn does_movements_cause_cycle(
                     moving = false;
                     break;
                 }
-                let next_x = x;
                 let next_y = y - 1;
-                if characters[next_x][next_y] == b'#' {
+                if characters[x][next_y] == b'#' {
                     direction = 0;
                 } else {
-                    add_seen_location(&mut seen_locations, get_key(x, y), direction);
-                    x = next_x;
+                    seen_locations.insert(key);
                     y = next_y;
                 }
             }
@@ -134,15 +110,15 @@ fn does_movements_cause_cycle(
     return false;
 }
 
-#[allow(dead_code)]
-pub fn solve(inputs: &Vec<String>) -> String {
-    let mut input_chars: Vec<Vec<u8>> = inputs.iter().map(|s| s.clone().into_bytes()).collect();
-
-    let begin_state = get_beginning_state(&input_chars);
-    // insert start location
+fn thread_work(
+    start_x: usize,
+    end_x: usize,
+    mut input_chars: Vec<Vec<u8>>,
+    begin_state: &(usize, usize, u32),
+    tx: Sender<i32>,
+) {
     let mut good_locations = 0;
-    for x in 0..input_chars.len() {
-        println!("x:{} total: {}", x, input_chars.len());
+    for x in start_x..end_x {
         for y in 0..input_chars[0].len() {
             if input_chars[x][y] == b'.' {
                 input_chars[x][y] = b'#';
@@ -153,6 +129,36 @@ pub fn solve(inputs: &Vec<String>) -> String {
             }
         }
     }
+    tx.send(good_locations).unwrap();
+}
 
-    good_locations.to_string()
+#[allow(dead_code)]
+pub fn solve(inputs: &Vec<String>) -> String {
+    let input_chars: Vec<Vec<u8>> = inputs.iter().map(|s| s.clone().into_bytes()).collect();
+    let thread_count = 7;
+    let begin_state = get_beginning_state(&input_chars);
+    let (tx, rx) = mpsc::channel();
+
+    let x_step = input_chars.len() / thread_count;
+    for t in 0..thread_count {
+        let begin_x = t * x_step;
+        let mut end_x = (t + 1) * x_step;
+        if t == thread_count - 1 {
+            end_x = input_chars.len();
+        }
+        println!("begin:{} end:{}", begin_x, end_x);
+        let cloned_input_chars: Vec<Vec<u8>> = input_chars.iter().map(|v| v.clone()).collect();
+        let cloned_tx = tx.clone();
+        thread::spawn(move || {
+            thread_work(begin_x, end_x, cloned_input_chars, &begin_state, cloned_tx)
+        });
+    }
+    drop(tx);
+
+    let mut good_locations = 0;
+    for received in rx {
+        good_locations += received;
+        println!("received {}", received);
+    }
+    return good_locations.to_string();
 }
