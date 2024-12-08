@@ -1,63 +1,65 @@
-fn combine_values(first: u64, second: u64) -> u64 {
-    let mut factor = 1;
-    loop {
-        factor *= 10;
-        if factor > second {
-            break;
+use std::collections::{HashMap, HashSet};
+
+fn calculate_antinodes(
+    towers: HashMap<u8, Vec<(i32, i32)>>,
+    max_x: i32,
+    max_y: i32,
+) -> HashSet<(i32, i32)> {
+    let mut antinodes: HashSet<(i32, i32)> = HashSet::new();
+    for (_tower_key, radio_towers) in towers {
+        if radio_towers.len() < 2 {
+            continue;
+        }
+        for tower_index in 0..radio_towers.len() {
+            let main_tower = radio_towers[tower_index];
+            for other_tower_index in 0..radio_towers.len() {
+                if other_tower_index == tower_index {
+                    continue;
+                }
+                let other_tower = radio_towers[other_tower_index];
+                antinodes.insert(main_tower);
+                // tower - other tower
+                let diff_x = main_tower.0 - other_tower.0;
+                let diff_y = main_tower.1 - other_tower.1;
+                let mut new_x = main_tower.0 + diff_x;
+                let mut new_y = main_tower.1 + diff_y;
+                loop {
+                    if new_x < 0 || new_x > max_x || new_y < 0 || new_y > max_y {
+                        break;
+                    }
+                    antinodes.insert((new_x, new_y));
+
+                    new_x += diff_x;
+                    new_y += diff_y;
+                }
+            }
         }
     }
-    first * factor + second
-}
 
-fn combinations(
-    target_value: u64,
-    current_value: u64,
-    current_index: usize,
-    values: &Vec<u64>,
-) -> u32 {
-    if current_index == values.len() - 1 {
-        return if current_value == target_value { 1 } else { 0 };
-    }
-
-    let mut combo_counts = 0;
-    let next_index = current_index + 1;
-    combo_counts += combinations(
-        target_value,
-        current_value + values[next_index],
-        next_index,
-        values,
-    );
-    combo_counts += combinations(
-        target_value,
-        current_value * values[next_index],
-        next_index,
-        values,
-    );
-    combo_counts += combinations(
-        target_value,
-        combine_values(current_value, values[next_index]),
-        next_index,
-        values,
-    );
-    return combo_counts;
+    return antinodes;
 }
 
 #[allow(dead_code)]
 pub fn solve(inputs: &Vec<String>) -> String {
-    let mut calibration_result = 0;
-    for line in inputs {
-        let split_index = line.find(":").unwrap();
-        let target_value: u64 = line[..split_index].parse().unwrap();
-        let other_values: Vec<u64> = line[split_index + 2..]
-            .split(" ")
-            .map(|val| val.parse::<u64>().unwrap())
-            .collect();
-
-        let combo_counts = combinations(target_value, other_values[0], 0, &other_values);
-        // println!("target: {} combo_counts:{}", target_value, combo_counts);
-        if combo_counts > 0 {
-            calibration_result += target_value;
+    let mut radio_towers: HashMap<u8, Vec<(i32, i32)>> = HashMap::new();
+    for x in 0..inputs.len() {
+        for y in 0..inputs[0].len() {
+            let tower = inputs[x].as_bytes()[y];
+            if tower != b'.' {
+                radio_towers
+                    .entry(tower)
+                    .and_modify(|towers| {
+                        towers.push((x.try_into().unwrap(), y.try_into().unwrap()));
+                    })
+                    .or_insert(vec![(x.try_into().unwrap(), y.try_into().unwrap())]);
+            }
         }
     }
-    calibration_result.to_string()
+
+    let results = calculate_antinodes(
+        radio_towers,
+        (inputs.len() - 1).try_into().unwrap(),
+        (inputs[0].len() - 1).try_into().unwrap(),
+    );
+    results.len().to_string()
 }
