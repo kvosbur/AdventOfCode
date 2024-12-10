@@ -1,65 +1,93 @@
-use std::collections::{HashMap, HashSet};
+#[derive(Debug)]
+struct DiskNode {
+    used_pages: Vec<Option<u64>>,
+    original_used_length: u32,
+    free_pages: u32,
+}
 
-fn calculate_antinodes(
-    towers: HashMap<u8, Vec<(i32, i32)>>,
-    max_x: i32,
-    max_y: i32,
-) -> HashSet<(i32, i32)> {
-    let mut antinodes: HashSet<(i32, i32)> = HashSet::new();
-    for (_tower_key, radio_towers) in towers {
-        if radio_towers.len() < 2 {
-            continue;
+fn read_nodes(bytes: Vec<u8>) -> Vec<DiskNode> {
+    let mut disk_nodes: Vec<DiskNode> = Vec::new();
+    for start_index in (0..bytes.len()).step_by(2) {
+        let file_id = start_index / 2;
+        let used_blocks = bytes[start_index] - b'0';
+        let free_blocks: u8;
+        if start_index + 1 == bytes.len() {
+            free_blocks = 0;
+        } else {
+            free_blocks = bytes[start_index + 1] - b'0';
         }
-        for tower_index in 0..radio_towers.len() {
-            let main_tower = radio_towers[tower_index];
-            for other_tower_index in 0..radio_towers.len() {
-                if other_tower_index == tower_index {
-                    continue;
-                }
-                let other_tower = radio_towers[other_tower_index];
-                antinodes.insert(main_tower);
-                // tower - other tower
-                let diff_x = main_tower.0 - other_tower.0;
-                let diff_y = main_tower.1 - other_tower.1;
-                let mut new_x = main_tower.0 + diff_x;
-                let mut new_y = main_tower.1 + diff_y;
-                loop {
-                    if new_x < 0 || new_x > max_x || new_y < 0 || new_y > max_y {
-                        break;
-                    }
-                    antinodes.insert((new_x, new_y));
-
-                    new_x += diff_x;
-                    new_y += diff_y;
-                }
-            }
-        }
+        let used_blocks_vec: Vec<Option<u64>> = (0..used_blocks)
+            .map(|_r| Some(file_id.try_into().unwrap()))
+            .collect();
+        disk_nodes.push(DiskNode {
+            original_used_length: used_blocks_vec.len().try_into().unwrap(),
+            used_pages: used_blocks_vec,
+            free_pages: free_blocks.try_into().unwrap(),
+        });
     }
+    return disk_nodes;
+}
 
-    return antinodes;
+fn get_checksum(disk_nodes: &Vec<DiskNode>) -> u64 {
+    let mut checksum: u64 = 0;
+    let mut overall_index: u64 = 0;
+    for node in disk_nodes {
+        for block in &node.used_pages {
+            if block.is_some() {
+                checksum += block.unwrap() * (overall_index);
+            }
+
+            overall_index += 1;
+        }
+        let index_increase_amount: u64 = node.free_pages.try_into().unwrap();
+        overall_index += index_increase_amount;
+    }
+    return checksum;
 }
 
 #[allow(dead_code)]
 pub fn solve(inputs: &Vec<String>) -> String {
-    let mut radio_towers: HashMap<u8, Vec<(i32, i32)>> = HashMap::new();
-    for x in 0..inputs.len() {
-        for y in 0..inputs[0].len() {
-            let tower = inputs[x].as_bytes()[y];
-            if tower != b'.' {
-                radio_towers
-                    .entry(tower)
-                    .and_modify(|towers| {
-                        towers.push((x.try_into().unwrap(), y.try_into().unwrap()));
-                    })
-                    .or_insert(vec![(x.try_into().unwrap(), y.try_into().unwrap())]);
-            }
+    let bytes = inputs[0].clone().into_bytes();
+
+    let mut disk_nodes: Vec<DiskNode> = read_nodes(bytes);
+
+    let mut right_node_index = disk_nodes.len() - 1;
+
+    while right_node_index > 0 {
+        let right_node_read = &disk_nodes[right_node_index];
+        if right_node_read.used_pages.len() == 0 {
+            right_node_index -= 1;
+            continue;
         }
+        let mut left_node_index = 0;
+        while left_node_index < disk_nodes.len() {
+            let left_node_read = &disk_nodes[left_node_index];
+            if left_node_read.free_pages < right_node_read.original_used_length {
+                left_node_index += 1;
+                continue;
+            }
+
+            let mut right_moving = right_node_read.used_pages.clone();
+            let right_moving_count = right_node_read.original_used_length.clone();
+
+            let left_node_write = &mut disk_nodes[left_node_index];
+
+            for remove_index in 0..right_moving_count {
+                let i: usize = remove_index.try_into().unwrap();
+                left_node_write.used_pages.push(right_moving[i]);
+                right_moving[i] = None;
+                left_node_write.free_pages -= 1;
+            }
+
+            let right_node_write = &mut disk_nodes[right_node_index];
+            right_node_write.used_pages = right_moving;
+            break;
+        }
+        right_node_index -= 1;
     }
 
-    let results = calculate_antinodes(
-        radio_towers,
-        (inputs.len() - 1).try_into().unwrap(),
-        (inputs[0].len() - 1).try_into().unwrap(),
-    );
-    results.len().to_string()
+    // print!("{:?}", disk_nodes);
+    get_checksum(&disk_nodes).to_string()
 }
+
+// currently getting too high of a value

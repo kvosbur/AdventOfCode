@@ -1,6 +1,5 @@
 #[derive(Debug)]
 struct DiskNode {
-    id: u128,
     used_pages: Vec<u128>,
     free_pages: u128,
 }
@@ -23,7 +22,6 @@ pub fn solve(inputs: &Vec<String>) -> String {
             .map(|_r| file_id.try_into().unwrap())
             .collect();
         disk_nodes.push(DiskNode {
-            id: file_id.try_into().unwrap(),
             used_pages: used_blocks_vec,
             free_pages: free_blocks.try_into().unwrap(),
         });
