@@ -60,7 +60,7 @@ pub fn solve(inputs: &Vec<String>) -> String {
             continue;
         }
         let mut left_node_index = 0;
-        while left_node_index < disk_nodes.len() {
+        while left_node_index < right_node_index {
             let left_node_read = &disk_nodes[left_node_index];
             if left_node_read.free_pages < right_node_read.original_used_length {
                 left_node_index += 1;
@@ -86,7 +86,6 @@ pub fn solve(inputs: &Vec<String>) -> String {
         right_node_index -= 1;
     }
 
-    // print!("{:?}", disk_nodes);
     get_checksum(&disk_nodes).to_string()
 }
 
