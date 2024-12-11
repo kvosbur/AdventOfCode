@@ -36,34 +36,47 @@ fn get_stone_count(
     step_count: u128,
     step_count_step: u128,
     stone_counting: &mut StoneCounting,
-) -> (u128, &mut StoneCounting) {
+) -> u128 {
     let mut stone_count = 0;
-    let mut temp = stone_counting;
+    let stone_count_key: u128 = value * 100 + step_count;
 
-    if !temp.stone_map.contains_key(&value) {
-        temp.stone_map
+    if stone_counting
+        .stone_count_map
+        .contains_key(&stone_count_key)
+    {
+        return stone_counting
+            .stone_count_map
+            .get(&stone_count_key)
+            .unwrap()
+            .clone();
+    }
+
+    if !stone_counting.stone_map.contains_key(&value) {
+        stone_counting
+            .stone_map
             .insert(value, get_stones(value, step_count_step));
     }
-    if step_count == step_count_step * 3 && temp.stone_count_map.contains_key(&value) {
-        return (temp.stone_count_map.get(&value).unwrap().clone(), temp);
-    }
-    let stones: Vec<u128> = temp.stone_map.get(&value).unwrap().clone();
+
+    let stones: Vec<u128> = stone_counting.stone_map.get(&value).unwrap().clone();
 
     if step_count == step_count_step {
-        return (stones.len().try_into().unwrap(), temp);
+        return stones.len().try_into().unwrap();
     }
 
     for stone in stones {
-        let count: u128;
-        (count, temp) = get_stone_count(stone, step_count - step_count_step, step_count_step, temp);
-        stone_count += count;
+        stone_count += get_stone_count(
+            stone,
+            step_count - step_count_step,
+            step_count_step,
+            stone_counting,
+        );
     }
 
-    if step_count == step_count_step * 3 {
-        temp.stone_count_map.insert(value, stone_count);
-    }
+    stone_counting
+        .stone_count_map
+        .insert(stone_count_key, stone_count);
 
-    (stone_count, temp)
+    stone_count
 }
 
 #[allow(dead_code)]
@@ -79,12 +92,7 @@ pub fn solve(inputs: &Vec<String>) -> String {
         stone_count_map: HashMap::new(),
     };
     for val in start_values {
-        let temp_stone_count: u128;
-        (temp_stone_count, _) = get_stone_count(val, 75, 15, &mut stone_counting);
-        // let stones = get_stones(val, 75);
-        stone_count += temp_stone_count;
+        stone_count += get_stone_count(val, 75, 5, &mut stone_counting);
     }
     stone_count.to_string()
 }
-
-// too low: 846491367
