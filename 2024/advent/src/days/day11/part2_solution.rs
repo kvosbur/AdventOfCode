@@ -1,9 +1,8 @@
 use std::collections::HashMap;
 
 struct StoneCounting {
-    step_count: u128,
     stone_map: HashMap<u128, Vec<u128>>,
-    stone_count: u128,
+    stone_count_map: HashMap<u128, u128>,
 }
 
 fn get_stones(value: u128, step_count: u128) -> Vec<u128> {
@@ -45,11 +44,10 @@ fn get_stone_count(
         temp.stone_map
             .insert(value, get_stones(value, step_count_step));
     }
-    let stones: Vec<u128> = temp.stone_map.get(&value).unwrap().clone();
-
-    if step_count > 59 {
-        println!("{} val:{}  stones: {}", step_count, value, stones.len());
+    if step_count == step_count_step * 3 && temp.stone_count_map.contains_key(&value) {
+        return (temp.stone_count_map.get(&value).unwrap().clone(), temp);
     }
+    let stones: Vec<u128> = temp.stone_map.get(&value).unwrap().clone();
 
     if step_count == step_count_step {
         return (stones.len().try_into().unwrap(), temp);
@@ -59,6 +57,10 @@ fn get_stone_count(
         let count: u128;
         (count, temp) = get_stone_count(stone, step_count - step_count_step, step_count_step, temp);
         stone_count += count;
+    }
+
+    if step_count == step_count_step * 3 {
+        temp.stone_count_map.insert(value, stone_count);
     }
 
     (stone_count, temp)
@@ -73,9 +75,8 @@ pub fn solve(inputs: &Vec<String>) -> String {
 
     let mut stone_count = 0;
     let mut stone_counting = StoneCounting {
-        step_count: 0,
         stone_map: HashMap::new(),
-        stone_count: 0,
+        stone_count_map: HashMap::new(),
     };
     for val in start_values {
         let temp_stone_count: u128;
@@ -85,3 +86,5 @@ pub fn solve(inputs: &Vec<String>) -> String {
     }
     stone_count.to_string()
 }
+
+// too low: 846491367
