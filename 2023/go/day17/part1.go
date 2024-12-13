@@ -1,7 +1,6 @@
 package day17
 
 import (
-	"fmt"
 	"math"
 	"strconv"
 )
@@ -37,15 +36,6 @@ type bfsItem struct {
 }
 
 var bestVal = math.MaxInt
-
-func printGraph(graph [][]*node) {
-	for x := range graph {
-		for y := range graph[x] {
-			fmt.Print(string(rune(graph[x][y].heat_loss)))
-		}
-		fmt.Println("")
-	}
-}
 
 func getEndDirections(input_direction Direction, straight_left int) []Direction {
 	directions := []Direction{}
