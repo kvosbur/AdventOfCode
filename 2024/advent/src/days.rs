@@ -88,3 +88,10 @@ pub mod day13 {
     mod test_part1;
     mod test_part2;
 }
+
+pub mod day14 {
+    pub mod part1_solution;
+    pub mod part2_solution;
+    mod test_part1;
+    mod test_part2;
+}
