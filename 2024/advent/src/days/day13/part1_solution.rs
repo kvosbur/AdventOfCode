@@ -1,16 +1,16 @@
 #[derive(Debug)]
 struct Game {
-    a_button: (i64, i64),
-    b_button: (i64, i64),
-    prize: (i64, i64),
+    a_button: (f64, f64),
+    b_button: (f64, f64),
+    prize: (f64, f64),
 }
 
-fn parse_button_line(line: &String) -> (i64, i64) {
+fn parse_button_line(line: &String) -> (f64, f64) {
     let start_x = line.find("X").unwrap();
     let separator = line.find(", ").unwrap();
     let start_y = line.find("Y").unwrap();
-    let x: i64 = line[start_x + 2..separator].parse().unwrap();
-    let y: i64 = line[start_y + 2..].parse().unwrap();
+    let x: f64 = line[start_x + 2..separator].parse().unwrap();
+    let y: f64 = line[start_y + 2..].parse().unwrap();
     return (x, y);
 }
 
@@ -29,20 +29,18 @@ fn parse_games(inputs: &Vec<String>) -> Vec<Game> {
 }
 
 fn get_game_tokens(game: &Game) -> Option<i64> {
-    for a_button_presses in 0..(game.prize.0 / game.a_button.0 + 2) {
-        for b_button_presses in 0..(game.prize.0 / game.b_button.0 + 2) {
-            if a_button_presses * game.a_button.1 + b_button_presses * game.b_button.1
-                == game.prize.1
-                && a_button_presses * game.a_button.0 + b_button_presses * game.b_button.0
-                    == game.prize.0
-            {
-                println!(
-                    "a presses: {}  b presses: {}",
-                    a_button_presses, b_button_presses
-                );
-                return Some(a_button_presses * 3 + b_button_presses);
-            }
-        }
+    let determinant: f64 = game.a_button.0 * game.b_button.1 - game.b_button.0 * game.a_button.1;
+    let a_button_presses =
+        (game.prize.0 * game.b_button.1 - game.b_button.0 * game.prize.1) / determinant;
+    let b_button_presses =
+        (game.a_button.0 * game.prize.1 - game.prize.0 * game.a_button.1) / determinant;
+
+    let a_presses_int = a_button_presses as i64;
+    let b_presses_int = b_button_presses as i64;
+    if b_button_presses - (b_presses_int as f64) < 0.001
+        && a_button_presses - (a_presses_int as f64) < 0.001
+    {
+        return Some(a_presses_int * 3 + b_presses_int);
     }
     return None;
 }
@@ -53,7 +51,6 @@ pub fn solve(inputs: &Vec<String>) -> String {
     let mut tokens = 0;
     for game in &games {
         let maybe_tokens = get_game_tokens(game);
-        println!("{:?}  {:?}", maybe_tokens, game);
         if maybe_tokens.is_some() {
             tokens += maybe_tokens.unwrap();
         }
