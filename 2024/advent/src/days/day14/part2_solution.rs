@@ -1,161 +1,87 @@
-use std::{collections::HashMap, ops::Sub};
+use std::collections::HashSet;
 
-fn add_to_group(
-    x: usize,
-    y: usize,
-    input_chars: &Vec<&[u8]>,
-    groups: &mut HashMap<u8, Vec<Vec<(usize, usize)>>>,
-) {
-    let value = input_chars[x][y];
+#[derive(Debug)]
+struct Bot {
+    pos: (i64, i64),
+    vel: (i64, i64),
+}
 
-    if !groups.contains_key(&value) {
-        groups.insert(value, vec![]);
+fn parse_line(line: &str) -> (i64, i64) {
+    let temp: Vec<&str> = line.split(',').collect();
+    return (temp[0][2..].parse().unwrap(), temp[1].parse().unwrap());
+}
+
+fn parse_bots(inputs: &Vec<String>) -> Vec<Bot> {
+    let mut bots = vec![];
+    for line in inputs {
+        let space_index = line.find(' ').unwrap();
+        let pos_line = &line[..space_index];
+        let vel_line = &line[space_index + 1..];
+        bots.push(Bot {
+            pos: parse_line(pos_line),
+            vel: parse_line(vel_line),
+        })
     }
 
-    let value_sets = groups.get_mut(&value).unwrap();
+    return bots;
+}
 
-    // check top
-    let mut top_set_index: Option<usize> = None;
-    if y > 0 && input_chars[x][y - 1] == value {
-        top_set_index = value_sets.iter().position(|set| set.contains(&(x, y - 1)));
+fn wrap_value(val: i64, max_value: i64) -> i64 {
+    if val >= max_value {
+        return val - max_value;
+    } else if val < 0 {
+        return val + max_value;
     }
+    return val;
+}
 
-    // check left
-    let mut left_set_index: Option<usize> = None;
-    if x > 0 && input_chars[x - 1][y] == value {
-        left_set_index = value_sets.iter().position(|set| set.contains(&(x - 1, y)));
+fn move_bots(bots: &mut Vec<Bot>, max_x: i64, max_y: i64) {
+    for bot in bots {
+        bot.pos.0 = wrap_value(bot.vel.0 + bot.pos.0, max_x);
+        bot.pos.1 = wrap_value(bot.vel.1 + bot.pos.1, max_y);
     }
+}
 
-    if top_set_index.is_some() && left_set_index.is_some() {
-        if top_set_index == left_set_index {
-            value_sets
-                .get_mut(left_set_index.unwrap())
-                .unwrap()
-                .push((x, y));
-        } else {
-            // combine sets
-            if top_set_index < left_set_index {
-                left_set_index = Some(left_set_index.unwrap().sub(1));
+fn bots_all_at_different_pos(bots: &Vec<Bot>) -> bool {
+    let mut positions: HashSet<(i64, i64)> = HashSet::new();
+
+    for bot in bots {
+        if positions.contains(&(bot.pos.0, bot.pos.1)) {
+            return false;
+        }
+        positions.insert((bot.pos.0, bot.pos.1));
+    }
+    return true;
+}
+
+fn print_bots_pic(bots: &Vec<Bot>, max_x: i64, max_y: i64) {
+    for x in 0..max_x {
+        for y in 0..max_y {
+            let mut has_bot = false;
+            for bot in bots {
+                if bot.pos.0 == x && bot.pos.1 == y {
+                    has_bot = true;
+                    break;
+                }
             }
-            let mut top = value_sets.remove(top_set_index.unwrap());
-            let left = value_sets.get_mut(left_set_index.unwrap()).unwrap();
-            left.append(&mut top);
-            left.push((x, y));
+            print!("{}", if has_bot { "." } else { "x" });
         }
-    } else if top_set_index.is_some() {
-        value_sets
-            .get_mut(top_set_index.unwrap())
-            .unwrap()
-            .push((x, y));
-    } else if left_set_index.is_some() {
-        value_sets
-            .get_mut(left_set_index.unwrap())
-            .unwrap()
-            .push((x, y));
-    } else {
-        value_sets.push(vec![(x, y)]);
+        println!("");
     }
-}
-
-fn make_groups(input_chars: &Vec<&[u8]>) -> HashMap<u8, Vec<Vec<(usize, usize)>>> {
-    let mut groups: HashMap<u8, Vec<Vec<(usize, usize)>>> = HashMap::new();
-
-    for x in 0..input_chars.len() {
-        for y in 0..input_chars[0].len() {
-            add_to_group(x, y, input_chars, &mut groups);
-        }
-    }
-
-    return groups;
-}
-
-fn score_group(set: &Vec<(usize, usize)>, input_chars: &Vec<&[u8]>) -> u64 {
-    let mut sides: u64 = 0;
-    let value = input_chars[set[0].0][set[0].1];
-    // simple
-    for (x, y) in set {
-        // check top
-        if (*y == 0 || input_chars[*x][y - 1] != value)
-            && (*x == input_chars.len() - 1 || input_chars[x + 1][*y] != value)
-        {
-            sides += 1;
-        }
-        //check left
-        if (*x == 0 || input_chars[*x - 1][*y] != value)
-            && (*y == 0 || input_chars[*x][y - 1] != value)
-        {
-            sides += 1;
-        }
-        // check bottom
-        if (*y == input_chars[0].len() - 1 || input_chars[*x][y + 1] != value)
-            && (*x == 0 || input_chars[x - 1][*y] != value)
-        {
-            sides += 1;
-        }
-        // check right
-        if (*x == input_chars.len() - 1 || input_chars[*x + 1][*y] != value)
-            && (*y == input_chars[0].len() - 1 || input_chars[*x][y + 1] != value)
-        {
-            sides += 1;
-        }
-    }
-
-    // check L shapes
-    for (x, y) in set {
-        // check top
-        if *y > 0
-            && *x < input_chars.len() - 1
-            && input_chars[*x][y - 1] != value
-            && input_chars[x + 1][*y] == value
-            && input_chars[x + 1][y - 1] == value
-        {
-            sides += 1;
-        }
-        //check left
-        if *x > 0
-            && *y > 0
-            && input_chars[*x - 1][*y] != value
-            && input_chars[*x][*y - 1] == value
-            && input_chars[x - 1][y - 1] == value
-        {
-            sides += 1;
-        }
-        // check bottom
-        if *x > 0
-            && *y < input_chars[0].len() - 1
-            && input_chars[*x][y + 1] != value
-            && input_chars[*x - 1][*y] == value
-            && input_chars[x - 1][*y + 1] == value
-        {
-            sides += 1;
-        }
-        // check right
-        if *x < input_chars.len() - 1
-            && *y < input_chars[0].len() - 1
-            && input_chars[*x + 1][*y] != value
-            && input_chars[*x][*y + 1] == value
-            && input_chars[*x + 1][*y + 1] == value
-        {
-            sides += 1;
-        }
-    }
-    let area: u64 = set.len().try_into().unwrap();
-    return sides * area;
 }
 
 #[allow(dead_code)]
 pub fn solve(inputs: &Vec<String>) -> String {
-    let input_chars: Vec<&[u8]> = inputs.iter().map(|s| s.as_bytes()).collect();
+    let mut bots = parse_bots(inputs);
+    let max_x = 101;
+    let max_y = 103;
 
-    let groups = make_groups(&input_chars);
-
-    let mut score = 0;
-    for (_, sets) in groups {
-        for set in sets {
-            let added = score_group(&set, &input_chars);
-            score += added;
-        }
+    let mut seconds = 0;
+    while !bots_all_at_different_pos(&bots) {
+        move_bots(&mut bots, max_x, max_y);
+        seconds += 1;
     }
+    print_bots_pic(&bots, max_x, max_y);
 
-    score.to_string()
+    seconds.to_string()
 }
